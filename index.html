@@ -1,1132 +1,1194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Breakdown Leaderboard</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0a0a0a;
-      color: #fff;
-      min-height: 100vh;
-    }
-
-    /* ── MODE TOGGLE ── */
-    .mode-toggle {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2000;
-      display: flex;
-      gap: 8px;
-    }
-
-    .mode-btn {
-      padding: 10px 24px;
-      border: 1px solid #ff6a00;
-      border-radius: 20px;
-      background: #1a1a1a;
-      color: #ff6a00;
-      font-size: 0.82rem;
-      font-weight: bold;
-      cursor: pointer;
-      letter-spacing: 1px;
-      transition: all 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-
-    .mode-btn.active {
-      background: #ff6a00;
-      color: #fff;
-    }
-
-    .mode-btn:hover { background: #ff6a00; color: #fff; }
-
-    #adminView { display: block; }
-    #presentationView { display: none; }
-
-    header {
-      background: #111;
-      padding: 20px 20px 16px;
-      text-align: center;
-      border-bottom: 3px solid #ff6a00;
-    }
-
-    header img { width: 100px; margin-bottom: 8px; }
-
-    header h1 {
-      font-size: 1.8rem;
-      color: #ff6a00;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-    }
-
-    .sync-status {
-      display: inline-block;
-      margin-top: 6px;
-      padding: 3px 12px;
-      border-radius: 20px;
-      font-size: 0.72rem;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-
-    .sync-online  { background: #1a3a1a; color: #4caf50; border: 1px solid #4caf50; }
-    .sync-offline { background: #3a1a1a; color: #f44336; border: 1px solid #f44336; }
-    .sync-syncing { background: #3a2a1a; color: #ff9800; border: 1px solid #ff9800; }
-
-    .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-
-    .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-top: 3px solid #ff6a00;
-      border-radius: 8px;
-      padding: 14px;
-      text-align: center;
-    }
-
-    .stat-card .label {
-      font-size: 0.68rem;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-    }
-
-    .stat-card .value {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #ff6a00;
-    }
-
-    .tabs-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .tab {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 9px 14px;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.82rem;
-      color: #aaa;
-      transition: all 0.2s;
-    }
-
-    .tab:hover { border-color: #ff6a00; color: #fff; }
-
-    .tab.active {
-      background: #ff6a00;
-      color: #fff;
-      border-color: #ff6a00;
-      font-weight: bold;
-    }
-
-    .tab .delete-tab {
-      background: rgba(0,0,0,0.3);
-      border: none;
-      color: #fff;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 0.65rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .tab:hover .delete-tab { opacity: 1; }
-
-    .add-drill-btn {
-      padding: 9px 14px;
-      background: transparent;
-      border: 1px dashed #ff6a00;
-      border-radius: 6px;
-      color: #ff6a00;
-      cursor: pointer;
-      font-size: 0.82rem;
-      transition: all 0.2s;
-    }
-
-    .add-drill-btn:hover { background: #ff6a00; color: #fff; }
-
-    .drill-panel { display: none; }
-    .drill-panel.active { display: block; }
-
-    .panel-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    @media (max-width: 600px) {
-      .panel-grid { grid-template-columns: 1fr; }
-      header h1 { font-size: 1.2rem; }
-    }
-
-    .card {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 18px;
-    }
-
-    .card h3 {
-      color: #ff6a00;
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 14px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #333;
-    }
-
-    .form-group { margin-bottom: 12px; }
-
-    .form-group label {
-      display: block;
-      font-size: 0.72rem;
-      color: #888;
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 10px 12px;
-      background: #0a0a0a;
-      border: 1px solid #333;
-      border-radius: 6px;
-      color: #fff;
-      font-size: 0.92rem;
-      transition: border-color 0.2s;
-    }
-
-    .form-group input:focus, .form-group select:focus {
-      outline: none;
-      border-color: #ff6a00;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 11px;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .btn-primary   { background: #ff6a00; color: #fff; }
-    .btn-primary:hover { background: #e55e00; }
-    .btn-danger    { background: #c0392b; color: #fff; margin-top: 8px; }
-    .btn-danger:hover { background: #a93226; }
-    .btn-secondary { background: #333; color: #fff; }
-    .btn-secondary:hover { background: #444; }
-    .btn-warning   { background: #e67e22; color: #fff; }
-    .btn-warning:hover { background: #ca6f1e; }
-
-    .leaderboard-header {
-      background: #ff6a00;
-      border-radius: 8px 8px 0 0;
-      padding: 10px 16px;
-      display: grid;
-      grid-template-columns: 50px 1fr 110px 160px;
-      font-size: 0.72rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .leaderboard-list { border-radius: 0 0 8px 8px; overflow: hidden; }
-
-    .leaderboard-entry {
-      display: grid;
-      grid-template-columns: 50px 1fr 110px 160px;
-      padding: 10px 16px;
-      background: #1a1a1a;
-      border-bottom: 1px solid #222;
-      align-items: center;
-      font-size: 0.85rem;
-      transition: background 0.2s;
-      animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(-10px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-
-    .leaderboard-entry:hover { background: #222; }
-    .leaderboard-entry:nth-child(1) { background: #1a1500; border-left: 3px solid #ffd700; }
-    .leaderboard-entry:nth-child(2) { background: #161616; border-left: 3px solid #c0c0c0; }
-    .leaderboard-entry:nth-child(3) { background: #1a0f00; border-left: 3px solid #cd7f32; }
-
-    .rank { font-weight: bold; font-size: 0.95rem; }
-    .rank-1 { color: #ffd700; }
-    .rank-2 { color: #c0c0c0; }
-    .rank-3 { color: #cd7f32; }
-
-    .score-count    { color: #4caf50; font-weight: bold; font-size: 0.95rem; }
-    .score-time-val { color: #ff6a00; font-weight: bold; font-size: 0.95rem; }
-
-    .pb-badge {
-      display: inline-block;
-      background: #ff6a00;
-      color: #fff;
-      font-size: 0.62rem;
-      padding: 2px 5px;
-      border-radius: 10px;
-      margin-left: 5px;
-      font-weight: bold;
-      animation: pulse 1s ease infinite alternate;
-    }
-
-    @keyframes pulse {
-      from { opacity: 0.7; }
-      to   { opacity: 1; }
-    }
-
-    .entry-date { font-size: 0.68rem; color: #555; }
-
-    .entry-actions {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      justify-content: flex-end;
-    }
-
-    .entry-action-btn {
-      background: none;
-      border: 1px solid transparent;
-      color: #444;
-      cursor: pointer;
-      font-size: 0.72rem;
-      padding: 3px 7px;
-      border-radius: 4px;
-      transition: all 0.2s;
-    }
-
-    .entry-action-btn.edit:hover {
-      background: #1a3a5c;
-      border-color: #3a8fd4;
-      color: #3a8fd4;
-    }
-
-    .entry-action-btn.delete:hover {
-      background: #3a1a1a;
-      border-color: #c0392b;
-      color: #c0392b;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: #444;
-      background: #1a1a1a;
-      border-radius: 0 0 8px 8px;
-    }
-
-    /* ── Modals ── */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-overlay.open { display: flex; }
-
-    .modal {
-      background: #1a1a1a;
-      border: 1px solid #ff6a00;
-      border-radius: 12px;
-      padding: 28px;
-      width: 90%;
-      max-width: 420px;
-    }
-
-    .modal h2 {
-      color: #ff6a00;
-      margin-bottom: 20px;
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .modal-buttons { display: flex; gap: 10px; margin-top: 16px; }
-    .modal-buttons .btn { flex: 1; }
-
-    .edit-modal-info {
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-    }
-
-    .edit-modal-info .player-name {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-
-    .edit-modal-info .current-score {
-      font-size: 0.8rem;
-      color: #888;
-    }
-
-    .edit-modal-info .current-score span {
-      color: #ff6a00;
-      font-weight: bold;
-    }
-
-    /* ── Toast ── */
-    .toast {
-      position: fixed;
-      bottom: 80px;
-      right: 24px;
-      background: #ff6a00;
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 0.88rem;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s;
-      z-index: 3000;
-      pointer-events: none;
-    }
-
-    .toast.show { opacity: 1; transform: translateY(0); }
-
-    /* ════════════════════════════════════════
-       PRESENTATION / TV MODE
-    ════════════════════════════════════════ */
-    #presentationView {
-      background: #000;
-      min-height: 100vh;
-      padding-bottom: 80px;
-    }
-
-    .pres-header {
-      background: #111;
-      border-bottom: 4px solid #ff6a00;
-      padding: 24px 40px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-    }
-
-    .pres-header img { height: 70px; }
-
-    .pres-header h1 {
-      font-size: 3rem;
-      color: #ff6a00;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-    }
-
-    .pres-drill-title {
-      text-align: center;
-      padding: 20px 40px 10px;
-      font-size: 2rem;
-      color: #fff;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      border-bottom: 2px solid #222;
-      margin-bottom: 10px;
-    }
-
-    .pres-drill-subtitle {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #555;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 30px;
-    }
-
-    /* ── TV Leaderboard Table ── */
-    .pres-table-wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 30px 40px;
-      /* Allow scrolling if many entries */
-      max-height: calc(100vh - 260px);
-      overflow-y: auto;
-    }
-
-    /* Hide scrollbar visually but keep functionality */
-    .pres-table-wrap::-webkit-scrollbar { width: 6px; }
-    .pres-table-wrap::-webkit-scrollbar-track { background: #111; }
-    .pres-table-wrap::-webkit-scrollbar-thumb { background: #ff6a00; border-radius: 3px; }
-
-    .pres-table-header {
-      display: grid;
-      grid-template-columns: 80px 1fr 160px;
-      background: #ff6a00;
-      border-radius: 10px 10px 0 0;
-      padding: 14px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .pres-entry {
-      display: grid;
-      grid-template-columns: 80px 1fr 160px;
-      padding: 16px 24px;
-      background: #111;
-      border-bottom: 1px solid #1a1a1a;
-      align-items: center;
-      font-size: 1.4rem;
-      transition: background 0.2s;
-    }
-
-    .pres-entry:last-child { border-radius: 0 0 10px 10px; }
-    .pres-entry:nth-child(1) { background: #1a1500; border-left: 5px solid #ffd700; font-size: 1.6rem; }
-    .pres-entry:nth-child(2) { background: #141414; border-left: 5px solid #c0c0c0; }
-    .pres-entry:nth-child(3) { background: #1a0f00; border-left: 5px solid #cd7f32; }
-
-    .pres-rank { font-weight: bold; }
-    .pres-rank-1 { color: #ffd700; font-size: 1.8rem; }
-    .pres-rank-2 { color: #c0c0c0; }
-    .pres-rank-3 { color: #cd7f32; }
-
-    .pres-name { font-weight: bold; color: #fff; }
-    .pres-score-count { color: #4caf50; font-weight: bold; }
-    .pres-score-time  { color: #ff6a00; font-weight: bold; }
-
-    .pres-pb {
-      display: inline-block;
-      background: #ff6a00;
-      color: #fff;
-      font-size: 0.7rem;
-      padding: 3px 8px;
-      border-radius: 10px;
-      margin-left: 10px;
-      font-weight: bold;
-      vertical-align: middle;
-      animation: pulse 1s ease infinite alternate;
-    }
-
-    /* ── Drill nav dots for TV ── */
-    .pres-nav {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 16px 0 10px;
-    }
-
-    .pres-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #333;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .pres-dot.active { background: #ff6a00; }
-
-    /* ── Auto-rotate controls ── */
-    .pres-controls {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      padding: 10px 0 20px;
-    }
-
-    .pres-ctrl-btn {
-      padding: 8px 20px;
-      border: 1px solid #333;
-      border-radius: 20px;
-      background: #111;
-      color: #888;
-      font-size: 0.78rem;
-      cursor: pointer;
-      letter-spacing: 1px;
-      transition: all 0.2s;
-    }
-
-    .pres-ctrl-btn.on { border-color: #ff6a00; color: #ff6a00; }
-    .pres-ctrl-btn:hover { border-color: #ff6a00; color: #ff6a00; }
-
-    /* ── Ticker ── */
-    .ticker-wrap {
-      background: #ff6a00;
-      overflow: hidden;
-      white-space: nowrap;
-      padding: 8px 0;
-    }
-
-    .ticker-inner {
-      display: inline-block;
-      animation: ticker 30s linear infinite;
-      font-size: 0.88rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-
-    @keyframes ticker {
-      from { transform: translateX(100vw); }
-      to   { transform: translateX(-100%); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breakdown Leaderboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #ff6a00;
+        }
+
+        .header img {
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            color: #ff6a00;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        /* TABS */
+        .tabs-container {
+            background: #1a1a1a;
+            padding: 15px 20px 0;
+            border-bottom: 2px solid #333;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .tab-btn {
+            background: #2d2d2d;
+            color: #aaa;
+            border: 1px solid #444;
+            padding: 8px 16px;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn:hover { background: #3d3d3d; color: #fff; }
+
+        .tab-btn.active {
+            background: #ff6a00;
+            color: #fff;
+            border-color: #ff6a00;
+        }
+
+        .tab-delete {
+            background: none;
+            border: none;
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 0.9em;
+            padding: 0 2px;
+            line-height: 1;
+        }
+
+        .add-drill-tab {
+            background: #1a3a1a;
+            color: #4CAF50;
+            border: 1px dashed #4CAF50;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+
+        .add-drill-tab:hover { background: #2a4a2a; }
+
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-card .label {
+            font-size: 0.7em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ff6a00;
+            margin-top: 4px;
+        }
+
+        /* FORM SECTION */
+        .form-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-section h3 {
+            color: #ff6a00;
+            margin-bottom: 15px;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .form-row input, .form-row select {
+            flex: 1;
+            min-width: 150px;
+            background: #2d2d2d;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+
+        .form-row input:focus, .form-row select:focus {
+            outline: none;
+            border-color: #ff6a00;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-orange {
+            background: #ff6a00;
+            color: #fff;
+        }
+
+        .btn-orange:hover { background: #e55a00; }
+
+        .btn-red {
+            background: #c0392b;
+            color: #fff;
+        }
+
+        .btn-red:hover { background: #a93226; }
+
+        .btn-green {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .btn-green:hover { background: #229954; }
+
+        /* LEADERBOARD */
+        .leaderboard {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .leaderboard-header {
+            background: #ff6a00;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .leaderboard-header h3 {
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: #2d2d2d;
+            padding: 10px 16px;
+            text-align: left;
+            font-size: 0.8em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #222;
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover { background: #222; }
+
+        tbody td {
+            padding: 12px 16px;
+            font-size: 0.95em;
+        }
+
+        .rank-1 { color: #FFD700; font-weight: bold; }
+        .rank-2 { color: #C0C0C0; font-weight: bold; }
+        .rank-3 { color: #CD7F32; font-weight: bold; }
+
+        .score-time { color: #4fc3f7; font-weight: bold; }
+        .score-count { color: #81c784; font-weight: bold; }
+
+        .pb-badge {
+            background: #ff6a00;
+            color: white;
+            font-size: 0.65em;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 6px;
+            white-space: nowrap;
+        }
+
+        .delete-entry-btn {
+            background: none;
+            border: none;
+            color: #555;
+            cursor: pointer;
+            font-size: 0.9em;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .delete-entry-btn:hover { color: #ff4444; background: #2d2d2d; }
+
+        .edit-entry-btn {
+            background: none;
+            border: none;
+            color: #555;
+            cursor: pointer;
+            font-size: 0.9em;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .edit-entry-btn:hover { color: #ff6a00; background: #2d2d2d; }
+
+        .timestamp {
+            font-size: 0.75em;
+            color: #555;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #555;
+        }
+
+        .empty-state .icon { font-size: 2em; margin-bottom: 10px; }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #1a1a1a;
+            border: 2px solid #ff6a00;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 420px;
+            position: relative;
+            z-index: 10000;
+        }
+
+        .modal h2 {
+            color: #ff6a00;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .modal input, .modal select {
+            width: 100%;
+            background: #2d2d2d;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 12px 14px;
+            border-radius: 6px;
+            font-size: 1em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .modal input:focus, .modal select:focus {
+            outline: none;
+            border-color: #ff6a00;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .modal-confirm {
+            background: #ff6a00;
+            color: white;
+        }
+
+        .modal-confirm:hover { background: #e55a00; }
+
+        .modal-cancel {
+            background: #333;
+            color: #aaa;
+        }
+
+        .modal-cancel:hover { background: #444; color: #fff; }
+
+        /* MODE TOGGLE */
+        .mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+            background: #1a1a1a;
+            padding: 10px 16px;
+            border-radius: 30px;
+            border: 1px solid #333;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .mode-toggle button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .mode-toggle .active-mode {
+            background: #ff6a00;
+            color: white;
+        }
+
+        .mode-toggle .inactive-mode {
+            background: #2d2d2d;
+            color: #888;
+        }
+
+        /* TV MODE */
+        .tv-mode {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            z-index: 500;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tv-mode.active { display: flex; }
+
+        .tv-header {
+            background: #111;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 3px solid #ff6a00;
+            gap: 20px;
+        }
+
+        .tv-header img { height: 60px; }
+
+        .tv-header h1 {
+            font-size: 2.5em;
+            color: #ff6a00;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .tv-drill-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 15px 40px;
+            background: #111;
+            border-bottom: 1px solid #222;
+            flex-wrap: wrap;
+        }
+
+        .tv-drill-tab {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid #333;
+            background: #1a1a1a;
+            color: #888;
+            transition: all 0.3s;
+        }
+
+        .tv-drill-tab.active {
+            background: #ff6a00;
+            color: white;
+            border-color: #ff6a00;
+        }
+
+        .tv-content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 40px;
+        }
+
+        .tv-scores-container {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #ff6a00 #1a1a1a;
+        }
+
+        .tv-scores-container::-webkit-scrollbar { width: 6px; }
+        .tv-scores-container::-webkit-scrollbar-track { background: #1a1a1a; }
+        .tv-scores-container::-webkit-scrollbar-thumb { background: #ff6a00; border-radius: 3px; }
+
+        .tv-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tv-table th {
+            background: #1a1a1a;
+            color: #ff6a00;
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: sticky;
+            top: 0;
+        }
+
+        .tv-table td {
+            padding: 14px 20px;
+            font-size: 1.3em;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .tv-table tr:hover { background: #111; }
+
+        .tv-rank { font-size: 1.4em; font-weight: bold; }
+        .tv-name { font-size: 1.3em; }
+        .tv-score { font-size: 1.5em; font-weight: bold; color: #ff6a00; }
+
+        .tv-ticker {
+            background: #ff6a00;
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .tv-ticker-inner {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
+            font-size: 0.9em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* NOTIFICATION */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff6a00;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 99999;
+            transform: translateX(200px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.3em; }
+            .form-row { flex-direction: column; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
 </head>
 <body>
 
-<!-- ── TOAST ── -->
-<div class="toast" id="toast"></div>
-
-<!-- ════════════════════════════════
-     ADMIN VIEW
-════════════════════════════════ -->
-<div id="adminView">
-  <header>
-    <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="Logo"/>
+<!-- HEADER -->
+<div class="header">
+    <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="Logo">
     <h1>Breakdown Leaderboard</h1>
-    <span class="sync-status sync-syncing" id="syncStatus">⟳ CONNECTING</span>
-  </header>
-
-  <div class="container">
-    <div class="stats-bar" id="statsBar">
-      <div class="stat-card">
-        <div class="label">Total Drills</div>
-        <div class="value" id="statDrills">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Total Entries</div>
-        <div class="value" id="statEntries">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Current Leader</div>
-        <div class="value" id="statLeader">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Best Score</div>
-        <div class="value" id="statBest">—</div>
-      </div>
-    </div>
-
-    <div class="tabs-wrapper" id="tabsWrapper">
-      <button class="add-drill-btn" onclick="openAddDrillModal()">＋ Add Drill</button>
-    </div>
-
-    <div id="drillPanels"></div>
-  </div>
 </div>
 
-<!-- ════════════════════════════════
-     PRESENTATION / TV VIEW
-════════════════════════════════ -->
-<div id="presentationView">
-  <div class="pres-header">
-    <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="Logo"/>
-    <h1>Breakdown Leaderboard</h1>
-  </div>
+<!-- DRILL TABS -->
+<div class="tabs-container" id="tabsContainer"></div>
 
-  <div class="ticker-wrap">
-    <span class="ticker-inner" id="tickerText">🏀 BREAKDOWN LEADERBOARD &nbsp;&nbsp;&nbsp; LIVE RESULTS &nbsp;&nbsp;&nbsp;</span>
-  </div>
+<!-- MAIN CONTENT -->
+<div class="main-content" id="adminPanel">
 
-  <div class="pres-nav" id="presNav"></div>
+    <!-- STATS BAR -->
+    <div class="stats-bar" id="statsBar"></div>
 
-  <div class="pres-controls">
-    <button class="pres-ctrl-btn" id="autoRotateBtn" onclick="toggleAutoRotate()">⟳ AUTO-ROTATE: OFF</button>
-    <button class="pres-ctrl-btn" onclick="presNav(-1)">◀ PREV</button>
-    <button class="pres-ctrl-btn" onclick="presNav(1)">NEXT ▶</button>
-  </div>
-
-  <div id="presDrillTitle" class="pres-drill-title"></div>
-  <div id="presDrillSubtitle" class="pres-drill-subtitle"></div>
-
-  <div class="pres-table-wrap" id="presTableWrap">
-    <div class="pres-table-header">
-      <span>Rank</span>
-      <span>Player</span>
-      <span id="presScoreLabel">Score</span>
-    </div>
-    <div id="presLeaderboard"></div>
-  </div>
-</div>
-
-<!-- ── MODE TOGGLE (fixed bottom centre) ── -->
-<div class="mode-toggle">
-  <button class="mode-btn active" id="btnAdmin"  onclick="setMode('admin')">⚙ ADMIN</button>
-  <button class="mode-btn"        id="btnTV"     onclick="setMode('tv')">📺 TV MODE</button>
-</div>
-
-<!-- ── ADD DRILL MODAL ── -->
-<div class="modal-overlay" id="addDrillModal">
-  <div class="modal">
-    <h2>➕ New Drill</h2>
-    <div class="form-group">
-      <label>Drill Name</label>
-      <input type="text" id="newDrillName" placeholder="e.g. 17s Drill"/>
-    </div>
-    <div class="form-group">
-      <label>Scoring Type</label>
-      <select id="newDrillType">
-        <option value="time">Time — lower is better (e.g. 17.3s)</option>
-        <option value="count">Count — higher is better (e.g. 42 reps)</option>
-      </select>
-    </div>
-    <div class="modal-buttons">
-      <button class="btn btn-secondary" onclick="closeAddDrillModal()">Cancel</button>
-      <button class="btn btn-primary"   onclick="confirmAddDrill()">Create Drill</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── EDIT ENTRY MODAL ── -->
-<div class="modal-overlay" id="editModal">
-  <div class="modal">
-    <h2>✏️ Edit Score</h2>
-    <div class="edit-modal-info">
-      <div class="player-name" id="editPlayerName"></div>
-      <div class="current-score">Current score: <span id="editCurrentScore"></span></div>
-    </div>
-    <div class="form-group">
-      <label id="editScoreLabel">New Score</label>
-      <input type="number" id="editScoreInput" step="0.01" min="0" placeholder="Enter new score"/>
-    </div>
-    <div class="modal-buttons">
-      <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
-      <button class="btn btn-primary"   onclick="confirmEdit()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════
-     FIREBASE + APP LOGIC
-════════════════════════════════ -->
-<script type="module">
-  import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, onValue, set, push, remove, update }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-  // ── YOUR FIREBASE CONFIG ──
-  const firebaseConfig = {
-    apiKey:            "YOUR_API_KEY",
-    authDomain:        "YOUR_PROJECT.firebaseapp.com",
-    databaseURL:       "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-    projectId:         "YOUR_PROJECT",
-    storageBucket:     "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId:             "YOUR_APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db  = getDatabase(app);
-
-  // ── STATE ──
-  let drills       = {};   // { drillId: { name, type, entries: { entryId: {player,score,date,isPB} } } }
-  let currentDrill = null;
-  let editTarget   = null; // { drillId, entryId }
-  let presIndex    = 0;
-  let autoRotate   = false;
-  let rotateTimer  = null;
-
-  // ── FIREBASE LISTENER ──
-  onValue(ref(db, 'drills'), snap => {
-    drills = snap.val() || {};
-    renderAll();
-    updateSyncStatus('online');
-  }, () => updateSyncStatus('offline'));
-
-  updateSyncStatus('syncing');
-
-  // ════════════════════════════════
-  //  RENDER
-  // ════════════════════════════════
-  function renderAll() {
-    renderTabs();
-    renderPanels();
-    renderStats();
-    renderPresentation();
-  }
-
-  function renderTabs() {
-    const wrapper = document.getElementById('tabsWrapper');
-    wrapper.innerHTML = `<button class="add-drill-btn" onclick="openAddDrillModal()">＋ Add Drill</button>`;
-    const ids = Object.keys(drills);
-    if (ids.length && !currentDrill) currentDrill = ids[0];
-    ids.forEach(id => {
-      const d   = drills[id];
-      const tab = document.createElement('div');
-      tab.className = 'tab' + (id === currentDrill ? ' active' : '');
-      tab.innerHTML = `
-        ${d.name}
-        <button class="delete-tab" onclick="deleteDrill('${id}',event)">✕</button>
-      `;
-      tab.addEventListener('click', () => { currentDrill = id; renderAll(); });
-      wrapper.appendChild(tab);
-    });
-  }
-
-  function renderPanels() {
-    const container = document.getElementById('drillPanels');
-    container.innerHTML = '';
-    Object.keys(drills).forEach(id => {
-      const d       = drills[id];
-      const isCount = d.type === 'count';
-      const entries = sortedEntries(d);
-      const panel   = document.createElement('div');
-      panel.className = 'drill-panel' + (id === currentDrill ? ' active' : '');
-
-      panel.innerHTML = `
-        <div class="panel-grid">
-          <div class="card">
-            <h3>Add Score</h3>
-            <div class="form-group">
-              <label>Player Name</label>
-              <input type="text" id="pName_${id}" placeholder="Enter player name"/>
-            </div>
-            <div class="form-group">
-              <label>${isCount ? 'Count (reps)' : 'Time (seconds, e.g. 17.3)'}</label>
-              <input type="number" id="pScore_${id}" step="${isCount ? '1' : '0.01'}"
-                     min="0" placeholder="${isCount ? 'e.g. 42' : 'e.g. 17.3'}"/>
-            </div>
-            <button class="btn btn-primary" onclick="addEntry('${id}')">Add Score</button>
-          </div>
-          <div class="card">
-            <h3>Drill Controls</h3>
-            <p style="color:#888;font-size:0.8rem;margin-bottom:12px;">
-              Type: <strong style="color:#ff6a00">${isCount ? 'COUNT (highest wins)' : 'TIME (fastest wins)'}</strong>
-            </p>
-            <button class="btn btn-warning" onclick="clearDrill('${id}')">Clear All Scores</button>
-            <button class="btn btn-danger"  onclick="deleteDrill('${id}',null)">Delete This Drill</button>
-          </div>
+    <!-- ADD SCORE FORM -->
+    <div class="form-section">
+        <h3>➕ Add Score</h3>
+        <div class="form-row">
+            <input type="text" id="playerName" placeholder="Player Name" />
+            <input type="text" id="playerScore" placeholder="Score / Time (e.g. 20.5)" />
+            <button class="btn btn-orange" onclick="addEntry()">Add Score</button>
         </div>
+    </div>
 
+    <!-- LEADERBOARD TABLE -->
+    <div class="leaderboard">
         <div class="leaderboard-header">
-          <span>Rank</span>
-          <span>Player</span>
-          <span>${isCount ? 'Count' : 'Time'}</span>
-          <span>Date / Actions</span>
+            <h3 id="leaderboardTitle">Leaderboard</h3>
+            <button class="btn btn-red" onclick="clearDrill()" style="font-size:0.75em; padding:6px 14px;">Clear All</button>
         </div>
-        <div class="leaderboard-list" id="list_${id}">
-          ${entries.length === 0
-            ? `<div class="empty-state">No scores yet — add the first one! 🏀</div>`
-            : entries.map((e, i) => entryHTML(id, e, i, isCount)).join('')}
+        <div id="leaderboardBody"></div>
+    </div>
+</div>
+
+<!-- TV MODE -->
+<div class="tv-mode" id="tvMode">
+    <div class="tv-header">
+        <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="Logo">
+        <h1>Breakdown Leaderboard</h1>
+    </div>
+    <div class="tv-drill-tabs" id="tvDrillTabs"></div>
+    <div class="tv-content">
+        <div class="tv-scores-container">
+            <table class="tv-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th id="tvScoreHeader">Score</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="tvLeaderboardBody"></tbody>
+            </table>
         </div>
-      `;
-      container.appendChild(panel);
-    });
-  }
+    </div>
+    <div class="tv-ticker">
+        <span class="tv-ticker-inner" id="tvTicker">🏆 BREAKDOWN LEADERBOARD — LIVE RESULTS 🏆</span>
+    </div>
+</div>
 
-  function entryHTML(drillId, e, i, isCount) {
-    const rankClass  = i < 3 ? `rank-${i+1}` : '';
-    const rankLabel  = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`;
-    const scoreClass = isCount ? 'score-count' : 'score-time-val';
-    const scoreDisp  = isCount ? e.score : `${parseFloat(e.score).toFixed(2)}s`;
-    const pbBadge    = e.isPB ? `<span class="pb-badge">NEW PB 🔥</span>` : '';
-    return `
-      <div class="leaderboard-entry">
-        <span class="rank ${rankClass}">${rankLabel}</span>
-        <span>${e.player}${pbBadge}</span>
-        <span class="${scoreClass}">${scoreDisp}</span>
-        <span>
-          <span class="entry-date">${e.date || ''}</span>
-          <span class="entry-actions">
-            <button class="entry-action-btn edit"   onclick="openEditModal('${drillId}','${e.id}')">✏️</button>
-            <button class="entry-action-btn delete" onclick="deleteEntry('${drillId}','${e.id}')">🗑</button>
-          </span>
-        </span>
-      </div>`;
-  }
+<!-- MODE TOGGLE -->
+<div class="mode-toggle">
+    <button id="adminModeBtn" class="active-mode" onclick="setMode('admin')">⚙️ Admin</button>
+    <button id="tvModeBtn" class="inactive-mode" onclick="setMode('tv')">📺 TV Mode</button>
+</div>
 
-  function renderStats() {
-    const ids      = Object.keys(drills);
-    let totalE     = 0;
-    let topPlayer  = '—';
-    let topScore   = '—';
+<!-- ADD DRILL MODAL -->
+<div class="modal-overlay" id="addDrillModal">
+    <div class="modal">
+        <h2>➕ New Drill</h2>
+        <input type="text" id="newDrillName" placeholder="Drill Name (e.g. 30s Sprint)" />
+        <select id="newDrillType">
+            <option value="time">⏱ Time Based (lower is better)</option>
+            <option value="count">🔢 Count Based (higher is better)</option>
+        </select>
+        <div class="modal-buttons">
+            <button class="modal-cancel" onclick="closeAddDrillModal()">Cancel</button>
+            <button class="modal-confirm" onclick="confirmAddDrill()">✅ Create Drill</button>
+        </div>
+    </div>
+</div>
 
-    ids.forEach(id => {
-      const d  = drills[id];
-      const es = sortedEntries(d);
-      totalE  += es.length;
-      if (es.length) {
-        const best = es[0];
-        topPlayer  = best.player;
-        topScore   = d.type === 'count' ? best.score : `${parseFloat(best.score).toFixed(2)}s`;
-      }
-    });
+<!-- EDIT SCORE MODAL -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal">
+        <h2>✏️ Edit Score</h2>
+        <input type="text" id="editPlayerName" placeholder="Player Name" />
+        <input type="text" id="editPlayerScore" placeholder="New Score / Time" />
+        <input type="hidden" id="editEntryId" />
+        <div class="modal-buttons">
+            <button class="modal-cancel" onclick="closeEditModal()">Cancel</button>
+            <button class="modal-confirm" onclick="confirmEdit()">✅ Save Changes</button>
+        </div>
+    </div>
+</div>
 
-    document.getElementById('statDrills').textContent  = ids.length;
-    document.getElementById('statEntries').textContent = totalE;
-    document.getElementById('statLeader').textContent  = topPlayer;
-    document.getElementById('statBest').textContent    = topScore;
-  }
+<!-- NOTIFICATION -->
+<div class="notification" id="notification"></div>
 
-  // ════════════════════════════════
-  //  PRESENTATION MODE
-  // ════════════════════════════════
-  function renderPresentation() {
-    const ids = Object.keys(drills);
-    if (!ids.length) return;
-    if (presIndex >= ids.length) presIndex = 0;
+<script>
+// ============================================================
+// DATA
+// ============================================================
+let drills = {};
+let currentDrill = null;
 
-    // nav dots
-    const nav = document.getElementById('presNav');
-    nav.innerHTML = ids.map((_, i) =>
-      `<div class="pres-dot ${i === presIndex ? 'active' : ''}" onclick="presJump(${i})"></div>`
-    ).join('');
+const DEFAULT_DRILLS = [
+    { name: "30sec Lane Touch", type: "count" },
+    { name: "17s", type: "time" },
+    { name: "2min Round The World", type: "time" },
+    { name: "45 Do or Die", type: "time" }
+];
 
-    const id      = ids[presIndex];
-    const d       = drills[id];
-    const isCount = d.type === 'count';
-    const entries = sortedEntries(d);
-
-    document.getElementById('presDrillTitle').textContent    = d.name;
-    document.getElementById('presDrillSubtitle').textContent =
-      isCount ? 'HIGHEST COUNT WINS' : 'FASTEST TIME WINS';
-    document.getElementById('presScoreLabel').textContent    = isCount ? 'Count' : 'Time';
-
-    const lb = document.getElementById('presLeaderboard');
-    if (!entries.length) {
-      lb.innerHTML = `<div style="text-align:center;padding:60px;color:#444;font-size:1.4rem;">No scores yet</div>`;
-      return;
-    }
-
-    lb.innerHTML = entries.map((e, i) => {
-      const rankLabel  = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`;
-      const rankClass  = i < 3 ? `pres-rank-${i+1}` : '';
-      const scoreClass = isCount ? 'pres-score-count' : 'pres-score-time';
-      const scoreDisp  = isCount ? e.score : `${parseFloat(e.score).toFixed(2)}s`;
-      const pbBadge    = e.isPB ? `<span class="pres-pb">PB 🔥</span>` : '';
-      return `
-        <div class="pres-entry">
-          <span class="pres-rank ${rankClass}">${rankLabel}</span>
-          <span class="pres-name">${e.player}${pbBadge}</span>
-          <span class="${scoreClass}">${scoreDisp}</span>
-        </div>`;
-    }).join('');
-
-    // ticker
-    const topEntry = entries[0];
-    document.getElementById('tickerText').textContent =
-      `🏀 ${d.name.toUpperCase()} &nbsp;|&nbsp; LEADER: ${topEntry.player.toUpperCase()} — ${isCount ? topEntry.score + ' REPS' : topEntry.score + 's'} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`;
-  }
-
-  // ── Presentation navigation ──
-  window.presNav = function(dir) {
-    const ids = Object.keys(drills);
-    presIndex = (presIndex + dir + ids.length) % ids.length;
-    renderPresentation();
-  };
-
-  window.presJump = function(i) {
-    presIndex = i;
-    renderPresentation();
-  };
-
-  window.toggleAutoRotate = function() {
-    autoRotate = !autoRotate;
-    const btn  = document.getElementById('autoRotateBtn');
-    btn.textContent = `⟳ AUTO-ROTATE: ${autoRotate ? 'ON' : 'OFF'}`;
-    btn.classList.toggle('on', autoRotate);
-    if (autoRotate) {
-      rotateTimer = setInterval(() => presNav(1), 8000);
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+    const saved = localStorage.getItem('breakdownLeaderboard');
+    if (saved) {
+        drills = JSON.parse(saved);
     } else {
-      clearInterval(rotateTimer);
+        DEFAULT_DRILLS.forEach(d => {
+            drills[d.name] = { type: d.type, entries: [] };
+        });
     }
-  };
 
-  // ════════════════════════════════
-  //  MODE TOGGLE
-  // ════════════════════════════════
-  window.setMode = function(mode) {
-    const isTV = mode === 'tv';
-    document.getElementById('adminView').style.display        = isTV ? 'none'  : 'block';
-    document.getElementById('presentationView').style.display = isTV ? 'block' : 'none';
-    document.getElementById('btnAdmin').classList.toggle('active', !isTV);
-    document.getElementById('btnTV').classList.toggle('active',  isTV);
-    if (isTV) renderPresentation();
-  };
+    const keys = Object.keys(drills);
+    if (keys.length > 0) {
+        currentDrill = keys[0];
+    }
 
-  // ════════════════════════════════
-  //  DATA HELPERS
-  // ════════════════════════════════
-  function sortedEntries(d) {
-    const entries = Object.entries(d.entries || {}).map(([id, e]) => ({ id, ...e }));
-    return d.type === 'count'
-      ? entries.sort((a, b) => b.score - a.score)
-      : entries.sort((a, b) => a.score - b.score);
-  }
+    renderTabs();
+    renderLeaderboard();
+    renderStats();
+    renderTV();
+}
 
-  function isPB(d, player, score) {
-    const prev = Object.values(d.entries || {}).filter(e => e.player === player);
-    if (!prev.length) return true;
-    return d.type === 'count'
-      ? score > Math.max(...prev.map(e => e.score))
-      : score < Math.min(...prev.map(e => e.score));
-  }
+// ============================================================
+// SAVE
+// ============================================================
+function save() {
+    localStorage.setItem('breakdownLeaderboard', JSON.stringify(drills));
+}
 
-  function nowStamp() {
-    return new Date().toLocaleString('en-AU', {
-      day:'2-digit', month:'short', year:'numeric',
-      hour:'2-digit', minute:'2-digit'
+// ============================================================
+// TABS
+// ============================================================
+function renderTabs() {
+    const container = document.getElementById('tabsContainer');
+    container.innerHTML = '';
+
+    Object.keys(drills).forEach(name => {
+        const tab = document.createElement('div');
+        tab.className = 'tab-btn' + (name === currentDrill ? ' active' : '');
+
+        const label = document.createElement('span');
+        label.textContent = name;
+        label.style.cursor = 'pointer';
+        label.onclick = () => switchDrill(name);
+
+        const del = document.createElement('button');
+        del.className = 'tab-delete';
+        del.textContent = '✕';
+        del.title = 'Delete drill';
+        del.onclick = (e) => {
+            e.stopPropagation();
+            deleteDrill(name);
+        };
+
+        tab.appendChild(label);
+        tab.appendChild(del);
+        container.appendChild(tab);
     });
-  }
 
-  // ════════════════════════════════
-  //  CRUD
-  // ════════════════════════════════
-  window.addEntry = function(drillId) {
-    const nameEl  = document.getElementById(`pName_${drillId}`);
-    const scoreEl = document.getElementById(`pScore_${drillId}`);
-    const name    = nameEl.value.trim();
-    const score   = parseFloat(scoreEl.value);
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-drill-tab';
+    addBtn.textContent = '+ Add Drill';
+    addBtn.onclick = openAddDrillModal;
+    container.appendChild(addBtn);
+}
 
-    if (!name || isNaN(score) || score < 0) {
-      showToast('Please enter a valid name and score ⚠️'); return;
-    }
+function switchDrill(name) {
+    currentDrill = name;
+    renderTabs();
+    renderLeaderboard();
+    renderStats();
+    renderTV();
+}
 
-    const d    = drills[drillId];
-    const pb   = isPB(d, name, score);
-    const entry = { player: name, score, date: nowStamp(), isPB: pb };
+// ============================================================
+// ADD DRILL MODAL
+// ============================================================
+function openAddDrillModal() {
+    document.getElementById('newDrillName').value = '';
+    document.getElementById('newDrillType').value = 'time';
+    document.getElementById('addDrillModal').classList.add('active');
+}
 
-    push(ref(db, `drills/${drillId}/entries`), entry)
-      .then(() => {
-        nameEl.value  = '';
-        scoreEl.value = '';
-        showToast(pb ? `🔥 NEW PB for ${name}!` : `✅ Score added for ${name}`);
-      })
-      .catch(() => showToast('Error saving score ❌'));
-  };
+function closeAddDrillModal() {
+    document.getElementById('addDrillModal').classList.remove('active');
+}
 
-  window.deleteEntry = function(drillId, entryId) {
-    if (!confirm('Delete this entry?')) return;
-    remove(ref(db, `drills/${drillId}/entries/${entryId}`));
-  };
-
-  window.clearDrill = function(drillId) {
-    if (!confirm('Clear ALL scores for this drill?')) return;
-    set(ref(db, `drills/${drillId}/entries`), {});
-  };
-
-  window.deleteDrill = function(drillId, e) {
-    if (e) e.stopPropagation();
-    if (!confirm('Delete this entire drill?')) return;
-    remove(ref(db, `drills/${drillId}`));
-    currentDrill = null;
-  };
-
-  // ── Add Drill ──
-  window.openAddDrillModal  = () => document.getElementById('addDrillModal').classList.add('open');
-  window.closeAddDrillModal = () => document.getElementById('addDrillModal').classList.remove('open');
-
-  window.confirmAddDrill = function() {
+function confirmAddDrill() {
     const name = document.getElementById('newDrillName').value.trim();
     const type = document.getElementById('newDrillType').value;
-    if (!name) { showToast('Please enter a drill name ⚠️'); return; }
-    push(ref(db, 'drills'), { name, type, entries: {} })
-      .then(() => {
-        closeAddDrillModal();
-        document.getElementById('newDrillName').value = '';
-        showToast(`✅ Drill "${name}" created!`);
-      });
-  };
 
-  // ── Edit Entry ──
-  window.openEditModal = function(drillId, entryId) {
-    const d   = drills[drillId];
-    const e   = d.entries[entryId];
-    editTarget = { drillId, entryId };
-    document.getElementById('editPlayerName').textContent    = e.player;
-    document.getElementById('editCurrentScore').textContent  =
-      d.type === 'count' ? e.score : `${parseFloat(e.score).toFixed(2)}s`;
-    document.getElementById('editScoreLabel').textContent    =
-      d.type === 'count' ? 'New Count (reps)' : 'New Time (seconds)';
-    document.getElementById('editScoreInput').value          = e.score;
-    document.getElementById('editModal').classList.add('open');
-  };
+    if (!name) {
+        showNotification('⚠️ Please enter a drill name!');
+        return;
+    }
 
-  window.closeEditModal = () => {
-    document.getElementById('editModal').classList.remove('open');
-    editTarget = null;
-  };
+    if (drills[name]) {
+        showNotification('⚠️ A drill with that name already exists!');
+        return;
+    }
 
-  window.confirmEdit = function() {
-    if (!editTarget) return;
-    const { drillId, entryId } = editTarget;
-    const score = parseFloat(document.getElementById('editScoreInput').value);
-    if (isNaN(score) || score < 0) { showToast('Invalid score ⚠️'); return; }
-    const d  = drills[drillId];
-    const pb = isPB(d, d.entries[entryId].player, score);
-    update(ref(db, `drills/${drillId}/entries/${entryId}`), { score, isPB: pb, date: nowStamp() })
-      .then(() => {
-        closeEditModal();
-        showToast(pb ? '🔥 Score updated — NEW PB!' : '✅ Score updated');
-      });
-  };
+    drills[name] = { type: type, entries: [] };
+    currentDrill = name;
+    save();
+    closeAddDrillModal();
+    renderTabs();
+    renderLeaderboard();
+    renderStats();
+    renderTV();
+    showNotification('✅ Drill "' + name + '" created!');
+}
 
-  // ════════════════════════════════
-  //  SYNC STATUS
-  // ════════════════════════════════
-  function updateSyncStatus(status) {
-    const el = document.getElementById('syncStatus');
-    const map = {
-      online:  ['sync-online',  '● LIVE'],
-      offline: ['sync-offline', '✕ OFFLINE'],
-      syncing: ['sync-syncing', '⟳ CONNECTING']
+// ============================================================
+// DELETE DRILL
+// ============================================================
+function deleteDrill(name) {
+    if (!confirm('Delete drill "' + name + '" and all its scores?')) return;
+    delete drills[name];
+    const keys = Object.keys(drills);
+    currentDrill = keys.length > 0 ? keys[0] : null;
+    save();
+    renderTabs();
+    renderLeaderboard();
+    renderStats();
+    renderTV();
+    showNotification('🗑️ Drill deleted');
+}
+
+// ============================================================
+// ADD ENTRY
+// ============================================================
+function addEntry() {
+    if (!currentDrill) {
+        showNotification('⚠️ No drill selected!');
+        return;
+    }
+
+    const nameInput = document.getElementById('playerName');
+    const scoreInput = document.getElementById('playerScore');
+    const name = nameInput.value.trim();
+    const scoreRaw = scoreInput.value.trim();
+
+    if (!name || !scoreRaw) {
+        showNotification('⚠️ Enter both name and score!');
+        return;
+    }
+
+    const score = parseFloat(scoreRaw);
+    if (isNaN(score) || score < 0) {
+        showNotification('⚠️ Enter a valid number!');
+        return;
+    }
+
+    const drill = drills[currentDrill];
+    const now = new Date();
+    const timestamp = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+    // Check personal best
+    const existing = drill.entries.filter(e => e.name.toLowerCase() === name.toLowerCase());
+    let isPB = false;
+    if (existing.length === 0) {
+        isPB = true;
+    } else {
+        const bestExisting = drill.type === 'count'
+            ? Math.max(...existing.map(e => e.score))
+            : Math.min(...existing.map(e => e.score));
+        isPB = drill.type === 'count' ? score > bestExisting : score < bestExisting;
+    }
+
+    const entry = {
+        id: Date.now(),
+        name: name,
+        score: score,
+        timestamp: timestamp,
+        isPB: isPB
     };
-    el.className  = `sync-status ${map[status][0]}`;
-    el.textContent = map[status][1];
-  }
 
-  // ════════════════════════════════
-  //  TOAST
-  // ════════════════════════════════
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
+    drill.entries.push(entry);
 
-  // ── expose helpers used in inline onclick ──
-  window.openAddDrillModal  = window.openAddDrillModal;
-  window.closeAddDrillModal = window.closeAddDrillModal;
+    // Keep top 50
+    sortEntries(drill);
+    if (drill.entries.length > 50) {
+        drill.entries = drill.entries.slice(0, 50);
+    }
+
+    save();
+    nameInput.value = '';
+    scoreInput.value = '';
+
+    renderLeaderboard();
+    renderStats();
+    renderTV();
+
+    if (isPB) {
+        showNotification('🔥 NEW PB for ' + name + '!');
+    } else {
+        showNotification('✅ Score added!');
+    }
+}
+
+// ============================================================
+// SORT
+// ============================================================
+function sortEntries(drill) {
+    drill.entries.sort((a, b) => {
+        return drill.type === 'count' ? b.score - a.score : a.score - b.score;
+    });
+}
+
+// ============================================================
+// DELETE ENTRY
+// ============================================================
+function deleteEntry(id) {
+    if (!currentDrill) return;
+    drills[currentDrill].entries = drills[currentDrill].entries.filter(e => e.id !== id);
+    save();
+    renderLeaderboard();
+    renderStats();
+    renderTV();
+    showNotification('🗑️ Entry removed');
+}
+
+// ============================================================
+// CLEAR DRILL
+// ============================================================
+function clearDrill() {
+    if (!currentDrill) return;
+    if (!confirm('Clear ALL scores for "' + currentDrill + '"?')) return;
+    drills[currentDrill].entries = [];
+    save();
+    renderLeaderboard();
+    renderStats();
+    renderTV();
+    showNotification('🗑️ All scores cleared');
+}
+
+// ============================================================
+// EDIT ENTRY
+// ============================================================
+function openEditModal(id) {
+    const drill = drills[currentDrill];
+    const entry = drill.entries.find(e => e.id === id);
+    if (!entry) return;
+
+    document.getElementById('editPlayerName').value = entry.name;
+    document.getElementById('editPlayerScore').value = entry.score;
+    document.getElementById('editEntryId').value = id;
+    document.getElementById('editModal').classList.add('active');
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.remove('active');
+}
+
+function confirmEdit() {
+    const id = parseInt(document.getElementById('editEntryId').value);
+    const name = document.getElementById('editPlayerName').value.trim();
+    const scoreRaw = document.getElementById('editPlayerScore').value.trim();
+
+    if (!name || !scoreRaw) {
+        showNotification('⚠️ Fill in all fields!');
+        return;
+    }
+
+    const score = parseFloat(scoreRaw);
+    if (isNaN(score) || score < 0) {
+        showNotification('⚠️ Enter a valid number!');
+        return;
+    }
+
+    const drill = drills[currentDrill];
+    const entry = drill.entries.find(e => e.id === id);
+    if (!entry) return;
+
+    entry.name = name;
+    entry.score = score;
+
+    // Recalculate PB
+    const allForPlayer = drill.entries.filter(e => e.name.toLowerCase() === name.toLowerCase());
+    const bestScore = drill.type === 'count'
+        ? Math.max(...allForPlayer.map(e => e.score))
+        : Math.min(...allForPlayer.map(e => e.score));
+
+    allForPlayer.forEach(e => {
+        e.isPB = e.score === bestScore;
+    });
+
+    sortEntries(drill);
+    save();
+    closeEditModal();
+    renderLeaderboard();
+    renderStats();
+    renderTV();
+    showNotification('✅ Score updated!');
+}
+
+// ============================================================
+// RENDER LEADERBOARD
+// ============================================================
+function renderLeaderboard() {
+    const body = document.getElementById('leaderboardBody');
+    const title = document.getElementById('leaderboardTitle');
+
+    if (!currentDrill) {
+        body.innerHTML = '<div class="empty-state"><div class="icon">🏋️</div><p>No drill selected</p></div>';
+        return;
+    }
+
+    const drill = drills[currentDrill];
+    title.textContent = currentDrill + ' — ' + (drill.type === 'count' ? 'Most Reps' : 'Fastest Time');
+
+    if (drill.entries.length === 0) {
+        body.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>No scores yet — add the first one!</p></div>';
+        return;
+    }
+
+    const scoreLabel = drill.type === 'count' ? 'Reps' : 'Time';
+
+    let html = '<table><thead><tr><th>Rank</th><th>Player</th><th>' + scoreLabel + '</th><th>Date</th><th></th></tr></thead><tbody>';
+
+    drill.entries.forEach((entry, index) => {
+        const rank = index + 1;
+        let rankClass = '';
+        let rankIcon = rank;
+        if (rank === 1) { rankClass = 'rank-1'; rankIcon = '🥇'; }
+        else if (rank === 2) { rankClass = 'rank-2'; rankIcon = '🥈'; }
+        else if (rank === 3) { rankClass = 'rank-3'; rankIcon = '🥉'; }
+
+        const scoreClass = drill.type === 'count' ? 'score-count' : 'score-time';
+        const scoreDisplay = drill.type === 'time' ? entry.score.toFixed(2) + 's' : entry.score;
+        const pbBadge = entry.isPB ? '<span class="pb-badge">NEW PB 🔥</span>' : '';
+
+        html += '<tr>';
+        html += '<td class="' + rankClass + '">' + rankIcon + '</td>';
+        html += '<td>' + entry.name + pbBadge + '</td>';
+        html += '<td class="' + scoreClass + '">' + scoreDisplay + '</td>';
+        html += '<td class="timestamp">' + entry.timestamp + '</td>';
+        html += '<td>';
+        html += '<button class="edit-entry-btn" onclick="openEditModal(' + entry.id + ')">✏️</button>';
+        html += '<button class="delete-entry-btn" onclick="deleteEntry(' + entry.id + ')">🗑️</button>';
+        html += '</td>';
+        html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    body.innerHTML = html;
+}
+
+// ============================================================
+// RENDER STATS
+// ============================================================
+function renderStats() {
+    const bar = document.getElementById('statsBar');
+    if (!currentDrill) { bar.innerHTML = ''; return; }
+
+    const drill = drills[currentDrill];
+    const entries = drill.entries;
+    const totalDrills = Object.keys(drills).length;
+
+    let leader = '—';
+    let best = '—';
+
+    if (entries.length > 0) {
+        leader = entries[0].name;
+        best = drill.type === 'time' ? entries[0].score.toFixed(2) + 's' : entries[0].score + ' reps';
+    }
+
+    bar.innerHTML = `
+        <div class="stat-card">
+            <div class="label">Total Entries</div>
+            <div class="value">${entries.length}</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Current Leader</div>
+            <div class="value" style="font-size:1em">${leader}</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Best Score</div>
+            <div class="value">${best}</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Total Drills</div>
+            <div class="value">${totalDrills}</div>
+        </div>
+    `;
+}
+
+// ============================================================
+// RENDER TV
+// ============================================================
+function renderTV() {
+    const tabsContainer = document.getElementById('tvDrillTabs');
+    const body = document.getElementById('tvLeaderboardBody');
+    const header = document.getElementById('tvScoreHeader');
+    const ticker = document.getElementById('tvTicker');
+
+    // Tabs
+    tabsContainer.innerHTML = '';
+    Object.keys(drills).forEach(name => {
+        const tab = document.createElement('div');
+        tab.className = 'tv-drill-tab' + (name === currentDrill ? ' active' : '');
+        tab.textContent = name;
+        tab.onclick = () => switchDrill(name);
+        tabsContainer.appendChild(tab);
+    });
+
+    if (!currentDrill) return;
+
+    const drill = drills[currentDrill];
+    header.textContent = drill.type === 'count' ? 'Reps' : 'Time';
+
+    body.innerHTML = '';
+
+    if (drill.entries.length === 0) {
+        body.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#555; padding:40px; font-size:1.2em;">No scores yet</td></tr>';
+        return;
+    }
+
+    drill.entries.forEach((entry, index) => {
+        const rank = index + 1;
+        let rankIcon = rank;
+        if (rank === 1) rankIcon = '🥇';
+        else if (rank === 2) rankIcon = '🥈';
+        else if (rank === 3) rankIcon = '🥉';
+
+        const scoreDisplay = drill.type === 'time' ? entry.score.toFixed(2) + 's' : entry.score + ' reps';
+        const pbText = entry.isPB ? ' 🔥' : '';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="tv-rank">${rankIcon}</td>
+            <td class="tv-name">${entry.name}${pbText}</td>
+            <td class="tv-score">${scoreDisplay}</td>
+            <td style="color:#555; font-size:0.9em">${entry.timestamp}</td>
+        `;
+        body.appendChild(tr);
+    });
+
+    // Ticker
+    const leaders = Object.entries(drills).map(([name, drill]) => {
+        if (drill.entries.length === 0) return null;
+        const top = drill.entries[0];
+        const score = drill.type === 'time' ? top.score.toFixed(2) + 's' : top.score + ' reps';
+        return `🏆 ${name}: ${top.name} (${score})`;
+    }).filter(Boolean);
+
+    ticker.textContent = leaders.length > 0
+        ? leaders.join('   •   ')
+        : '🏆 BREAKDOWN LEADERBOARD — LIVE RESULTS 🏆';
+}
+
+// ============================================================
+// MODE TOGGLE
+// ============================================================
+function setMode(mode) {
+    const tvMode = document.getElementById('tvMode');
+    const adminPanel = document.getElementById('adminPanel');
+    const tabsContainer = document.getElementById('tabsContainer');
+    const adminBtn = document.getElementById('adminModeBtn');
+    const tvBtn = document.getElementById('tvModeBtn');
+
+    if (mode === 'tv') {
+        tvMode.classList.add('active');
+        adminPanel.style.display = 'none';
+        tabsContainer.style.display = 'none';
+        adminBtn.className = 'inactive-mode';
+        tvBtn.className = 'active-mode';
+    } else {
+        tvMode.classList.remove('active');
+        adminPanel.style.display = 'block';
+        tabsContainer.style.display = 'flex';
+        adminBtn.className = 'active-mode';
+        tvBtn.className = 'inactive-mode';
+    }
+}
+
+// ============================================================
+// NOTIFICATION
+// ============================================================
+function showNotification(msg) {
+    const n = document.getElementById('notification');
+    n.textContent = msg;
+    n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 3000);
+}
+
+// ============================================================
+// START
+// ============================================================
+init();
 </script>
 </body>
 </html>
