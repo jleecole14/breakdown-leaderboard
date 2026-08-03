@@ -6,7 +6,7 @@
     <title>Breakdown Leaderboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #0a0a0a;
@@ -14,25 +14,17 @@
             min-height: 100vh;
         }
 
+        /* ── HEADER ── */
         .header {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             padding: 20px;
             text-align: center;
             border-bottom: 3px solid #ff6a00;
         }
+        .header img { height: 80px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
+        .header h1 { font-size: 2em; color: #ff6a00; letter-spacing: 3px; text-transform: uppercase; }
 
-        .header img {
-            height: 80px;
-            margin-bottom: 10px;
-        }
-
-        .header h1 {
-            font-size: 2em;
-            color: #ff6a00;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
+        /* ── TABS ── */
         .tabs-container {
             background: #1a1a1a;
             padding: 15px 20px 0;
@@ -42,7 +34,6 @@
             gap: 8px;
             align-items: center;
         }
-
         .tab-btn {
             background: #2d2d2d;
             color: #aaa;
@@ -56,124 +47,62 @@
             align-items: center;
             gap: 6px;
         }
-
         .tab-btn:hover { background: #3d3d3d; color: #fff; }
-
-        .tab-btn.active {
-            background: #ff6a00;
-            color: #fff;
-            border-color: #ff6a00;
-        }
-
+        .tab-btn.active { background: #ff6a00; color: #fff; border-color: #ff6a00; }
         .tab-delete {
-            background: none;
-            border: none;
-            color: #ff4444;
-            cursor: pointer;
-            font-size: 0.9em;
-            padding: 0 2px;
-            line-height: 1;
+            background: none; border: none; color: #ff4444;
+            cursor: pointer; font-size: 0.9em; padding: 0 2px; line-height: 1;
         }
-
         .add-drill-tab {
-            background: #1a3a1a;
-            color: #4CAF50;
-            border: 1px dashed #4CAF50;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85em;
-            transition: all 0.2s;
+            background: #1a3a1a; color: #4CAF50;
+            border: 1px dashed #4CAF50; padding: 8px 16px;
+            border-radius: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.2s;
         }
-
         .add-drill-tab:hover { background: #2a4a2a; }
 
+        /* ── MAIN ── */
         .main-content {
             padding: 20px;
             max-width: 900px;
             margin: 0 auto;
-            padding-bottom: 120px;
+            padding-bottom: 130px;
         }
 
+        /* ── STATS BAR ── */
         .stats-bar {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 12px;
             margin-bottom: 20px;
         }
-
         .stat-card {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
+            background: #1a1a1a; border: 1px solid #333;
+            border-radius: 8px; padding: 12px; text-align: center;
         }
+        .stat-card .label { font-size: 0.7em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card .value { font-size: 1.3em; font-weight: bold; color: #ff6a00; margin-top: 4px; }
 
-        .stat-card .label {
-            font-size: 0.7em;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stat-card .value {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #ff6a00;
-            margin-top: 4px;
-        }
-
+        /* ── FORM ── */
         .form-section {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
+            background: #1a1a1a; border: 1px solid #333;
+            border-radius: 10px; padding: 20px; margin-bottom: 20px;
         }
-
-        .form-section h3 {
-            color: #ff6a00;
-            margin-bottom: 15px;
-            font-size: 1em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
+        .form-section h3 { color: #ff6a00; margin-bottom: 15px; font-size: 1em; text-transform: uppercase; letter-spacing: 1px; }
+        .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
         .form-row input, .form-row select {
-            flex: 1;
-            min-width: 150px;
-            background: #2d2d2d;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-size: 0.95em;
+            flex: 1; min-width: 150px;
+            background: #2d2d2d; border: 1px solid #444;
+            color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 0.95em;
         }
+        .form-row input:focus, .form-row select:focus { outline: none; border-color: #ff6a00; }
+        .score-hint { margin-top: 8px; font-size: 0.8em; color: #666; }
 
-        .form-row input:focus, .form-row select:focus {
-            outline: none;
-            border-color: #ff6a00;
-        }
-
+        /* ── BUTTONS ── */
         .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: bold;
-            transition: all 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            padding: 10px 20px; border: none; border-radius: 6px;
+            cursor: pointer; font-size: 0.9em; font-weight: bold;
+            transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
         }
-
         .btn-orange { background: #ff6a00; color: #fff; }
         .btn-orange:hover { background: #e55a00; }
         .btn-red { background: #c0392b; color: #fff; }
@@ -181,170 +110,75 @@
         .btn-green { background: #27ae60; color: #fff; }
         .btn-green:hover { background: #229954; }
 
-        .leaderboard {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
+        /* ── LEADERBOARD ── */
+        .leaderboard { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; overflow: hidden; }
         .leaderboard-header {
-            background: #ff6a00;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: #ff6a00; padding: 12px 20px;
+            display: flex; justify-content: space-between; align-items: center;
         }
-
-        .leaderboard-header h3 {
-            font-size: 1em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
+        .leaderboard-header h3 { font-size: 1em; text-transform: uppercase; letter-spacing: 2px; }
         table { width: 100%; border-collapse: collapse; }
-
         thead th {
-            background: #2d2d2d;
-            padding: 10px 16px;
-            text-align: left;
-            font-size: 0.8em;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            background: #2d2d2d; padding: 10px 16px; text-align: left;
+            font-size: 0.8em; color: #888; text-transform: uppercase; letter-spacing: 1px;
         }
-
-        tbody tr {
-            border-bottom: 1px solid #222;
-            transition: background 0.2s;
-        }
-
+        tbody tr { border-bottom: 1px solid #222; transition: background 0.2s; }
         tbody tr:hover { background: #222; }
-
         tbody td { padding: 12px 16px; font-size: 0.95em; }
-
         .rank-1 { color: #FFD700; font-weight: bold; }
         .rank-2 { color: #C0C0C0; font-weight: bold; }
         .rank-3 { color: #CD7F32; font-weight: bold; }
-
         .score-time { color: #4fc3f7; font-weight: bold; }
         .score-count { color: #81c784; font-weight: bold; }
-
         .pb-badge {
-            background: #ff6a00;
-            color: white;
-            font-size: 0.65em;
-            padding: 2px 6px;
-            border-radius: 10px;
-            margin-left: 6px;
-            white-space: nowrap;
+            background: #ff6a00; color: white; font-size: 0.65em;
+            padding: 2px 6px; border-radius: 10px; margin-left: 6px; white-space: nowrap;
         }
-
         .delete-entry-btn {
-            background: none;
-            border: none;
-            color: #555;
-            cursor: pointer;
-            font-size: 0.9em;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: all 0.2s;
+            background: none; border: none; color: #555; cursor: pointer;
+            font-size: 0.9em; padding: 4px 8px; border-radius: 4px; transition: all 0.2s;
         }
-
         .delete-entry-btn:hover { color: #ff4444; background: #2d2d2d; }
-
         .edit-entry-btn {
-            background: none;
-            border: none;
-            color: #555;
-            cursor: pointer;
-            font-size: 0.9em;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: all 0.2s;
+            background: none; border: none; color: #555; cursor: pointer;
+            font-size: 0.9em; padding: 4px 8px; border-radius: 4px; transition: all 0.2s;
         }
-
         .edit-entry-btn:hover { color: #ff6a00; background: #2d2d2d; }
-
         .timestamp { font-size: 0.75em; color: #555; }
-
         .empty-state { text-align: center; padding: 40px; color: #555; }
         .empty-state .icon { font-size: 2em; margin-bottom: 10px; }
 
-        /* MODAL */
+        /* ── MODALS ── */
         .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.85);
+            z-index: 9999; justify-content: center; align-items: center;
         }
-
         .modal-overlay.active { display: flex; }
-
         .modal {
-            background: #1a1a1a;
-            border: 2px solid #ff6a00;
-            border-radius: 12px;
-            padding: 30px;
-            width: 90%;
-            max-width: 420px;
-            position: relative;
-            z-index: 10000;
+            background: #1a1a1a; border: 2px solid #ff6a00;
+            border-radius: 12px; padding: 30px; width: 90%; max-width: 420px;
         }
-
-        .modal h2 {
-            color: #ff6a00;
-            margin-bottom: 20px;
-            font-size: 1.2em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
+        .modal h2 { color: #ff6a00; margin-bottom: 20px; font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; }
+        .modal label { display: block; color: #aaa; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
         .modal input, .modal select {
-            width: 100%;
-            background: #2d2d2d;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 12px 14px;
-            border-radius: 6px;
-            font-size: 1em;
-            margin-bottom: 15px;
-            display: block;
+            width: 100%; background: #2d2d2d; border: 1px solid #444;
+            color: #fff; padding: 12px 14px; border-radius: 6px;
+            font-size: 1em; margin-bottom: 15px; display: block;
         }
-
-        .modal input:focus, .modal select:focus {
-            outline: none;
-            border-color: #ff6a00;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
+        .modal input:focus, .modal select:focus { outline: none; border-color: #ff6a00; }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 10px; }
         .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            text-transform: uppercase;
+            flex: 1; padding: 12px; border: none; border-radius: 6px;
+            cursor: pointer; font-size: 1em; font-weight: bold; text-transform: uppercase;
         }
-
         .modal-confirm { background: #ff6a00; color: white; }
         .modal-confirm:hover { background: #e55a00; }
-        .modal-confirm:disabled { background: #555; color: #888; cursor: not-allowed; }
+        .modal-confirm:disabled { background: #444; color: #666; cursor: not-allowed; }
         .modal-cancel { background: #333; color: #aaa; }
         .modal-cancel:hover { background: #444; color: #fff; }
 
-        /* MODE TOGGLE - moved up to avoid covering ticker */
+        /* ── MODE TOGGLE ── */
         .mode-toggle {
             position: fixed;
             bottom: 60px;
@@ -357,201 +191,135 @@
             padding: 10px 16px;
             border-radius: 30px;
             border: 1px solid #333;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
         }
-
         .mode-btn {
-            padding: 8px 18px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85em;
-            font-weight: bold;
-            transition: all 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            padding: 8px 18px; border: none; border-radius: 20px;
+            cursor: pointer; font-size: 0.85em; font-weight: bold;
+            transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
         }
-
-        .mode-btn.active { background: #ff6a00; color: white; }
-        .mode-btn:not(.active) { background: #2d2d2d; color: #888; }
+        .mode-btn.active { background: #ff6a00; color: #fff; }
+        .mode-btn:not(.active) { background: #2d2d2d; color: #aaa; }
         .mode-btn:not(.active):hover { background: #3d3d3d; color: #fff; }
 
-        /* TV / PRESENTATION MODE */
+        /* ── TV MODE ── */
         .tv-mode {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #0a0a0a;
-            z-index: 500;
-            flex-direction: column;
-            overflow: hidden;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: #000;
+            z-index: 500; flex-direction: column; overflow: hidden;
         }
-
         .tv-mode.active { display: flex; }
 
         .tv-header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            padding: 20px 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 4px solid #ff6a00;
-            gap: 20px;
-            flex-shrink: 0;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            padding: 18px 40px;
+            display: flex; align-items: center; justify-content: center;
+            border-bottom: 4px solid #ff6a00; gap: 20px; flex-shrink: 0;
         }
-
-        .tv-header img { height: 70px; }
-
-        .tv-header h1 {
-            font-size: 2.5em;
-            color: #ff6a00;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
+        .tv-header img { height: 65px; }
+        .tv-header h1 { font-size: 2.4em; color: #ff6a00; letter-spacing: 4px; text-transform: uppercase; }
 
         .tv-drill-name {
-            text-align: center;
-            font-size: 1.8em;
-            color: #ffffff;
-            padding: 16px;
-            background: #1a1a1a;
-            border-bottom: 2px solid #333;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            flex-shrink: 0;
-        }
-
-        /* ROTATION CONTROLS */
-        .tv-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            padding: 10px 20px;
-            background: #111;
-            border-bottom: 1px solid #333;
-            flex-shrink: 0;
-            flex-wrap: wrap;
-        }
-
-        .tv-controls button {
-            padding: 8px 18px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85em;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s;
-        }
-
-        .tv-prev-btn, .tv-next-btn {
-            background: #2d2d2d;
-            color: #fff;
-        }
-
-        .tv-prev-btn:hover, .tv-next-btn:hover { background: #ff6a00; }
-
-        .tv-auto-btn {
-            background: #1a3a1a;
-            color: #4CAF50;
-            border: 1px solid #4CAF50 !important;
-            border: none;
-        }
-
-        .tv-auto-btn.running {
-            background: #3a1a1a;
-            color: #ff4444;
-            border: 1px solid #ff4444 !important;
-        }
-
-        .tv-drill-indicator {
-            color: #888;
-            font-size: 0.85em;
-            letter-spacing: 1px;
+            text-align: center; font-size: 1.8em; color: #ffffff;
+            background: #ff6a00; padding: 12px 40px;
+            letter-spacing: 3px; text-transform: uppercase; flex-shrink: 0;
         }
 
         .tv-scores-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px 40px 20px;
-            scrollbar-width: thin;
-            scrollbar-color: #ff6a00 #1a1a1a;
+            flex: 1; overflow-y: auto; padding: 10px 40px;
+            scrollbar-width: thin; scrollbar-color: #ff6a00 #1a1a1a;
         }
-
         .tv-scores-container::-webkit-scrollbar { width: 8px; }
         .tv-scores-container::-webkit-scrollbar-track { background: #1a1a1a; }
         .tv-scores-container::-webkit-scrollbar-thumb { background: #ff6a00; border-radius: 4px; }
 
-        .tv-table {
-            width: 100%;
-            border-collapse: collapse;
+        .tv-scores-table { width: 100%; border-collapse: collapse; }
+        .tv-scores-table thead th {
+            background: #1a1a1a; color: #ff6a00; font-size: 1.1em;
+            padding: 14px 20px; text-transform: uppercase; letter-spacing: 2px;
+            position: sticky; top: 0; z-index: 10;
         }
+        .tv-scores-table tbody tr { border-bottom: 1px solid #1a1a1a; }
+        .tv-scores-table tbody tr:nth-child(even) { background: #0d0d0d; }
+        .tv-scores-table tbody tr:nth-child(odd) { background: #111; }
+        .tv-scores-table tbody td { padding: 14px 20px; }
 
-        .tv-table thead th {
-            background: #2d2d2d;
-            padding: 14px 20px;
-            text-align: left;
-            font-size: 1em;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: sticky;
-            top: 0;
+        @keyframes fadeInRow {
+            from { opacity: 0; transform: translateX(-12px); }
+            to { opacity: 1; transform: translateX(0); }
         }
+        .tv-scores-table tbody tr { animation: fadeInRow 0.4s ease; }
 
-        .tv-table tbody tr {
-            border-bottom: 1px solid #1f1f1f;
-            transition: background 0.2s;
+        .tv-rank { font-size: 1.5em; font-weight: bold; width: 80px; }
+        .tv-rank-1 { color: #FFD700; }
+        .tv-rank-2 { color: #C0C0C0; }
+        .tv-rank-3 { color: #CD7F32; }
+        .tv-name { font-size: 1.4em; font-weight: bold; color: #fff; }
+        .tv-score { font-size: 1.6em; font-weight: bold; color: #ff6a00; }
+        .tv-score-count { color: #81c784; }
+        .tv-pb { font-size: 0.6em; background: #ff6a00; color: #fff; padding: 2px 6px; border-radius: 8px; margin-left: 8px; vertical-align: middle; }
+
+        /* ── TV ROTATION BAR ── */
+        .tv-rotation-bar {
+            background: #1a1a1a; border-top: 2px solid #333;
+            padding: 10px 20px; display: flex; align-items: center;
+            justify-content: center; gap: 16px; flex-shrink: 0;
         }
-
-        .tv-table tbody tr:nth-child(even) { background: #111; }
-
-        .tv-table tbody td {
-            padding: 16px 20px;
-            font-size: 1.3em;
+        .tv-rotation-bar label {
+            color: #aaa; font-size: 0.85em;
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
         }
+        .tv-rotation-bar input[type="checkbox"] { accent-color: #ff6a00; width: 16px; height: 16px; }
+        .tv-rotation-bar select {
+            background: #2d2d2d; border: 1px solid #444; color: #fff;
+            padding: 6px 10px; border-radius: 6px; font-size: 0.85em;
+        }
+        .tv-drill-indicator { color: #ff6a00; font-size: 0.85em; font-weight: bold; }
 
-        .tv-rank-1 { color: #FFD700; font-weight: bold; font-size: 1.5em; }
-        .tv-rank-2 { color: #C0C0C0; font-weight: bold; }
-        .tv-rank-3 { color: #CD7F32; font-weight: bold; }
-
-        .tv-score-time { color: #4fc3f7; font-weight: bold; }
-        .tv-score-count { color: #81c784; font-weight: bold; }
-
-        /* TICKER */
+        /* ── TICKER ── */
         .tv-ticker {
-            background: #ff6a00;
-            color: white;
-            padding: 10px 0;
-            overflow: hidden;
-            white-space: nowrap;
-            flex-shrink: 0;
+            background: #ff6a00; color: #fff; padding: 10px 0;
+            overflow: hidden; white-space: nowrap; flex-shrink: 0;
         }
-
         .tv-ticker-inner {
             display: inline-block;
-            animation: ticker 30s linear infinite;
-            font-size: 1em;
-            font-weight: bold;
-            letter-spacing: 2px;
+            animation: ticker 35s linear infinite;
+            font-size: 1em; font-weight: bold; letter-spacing: 2px;
         }
-
         @keyframes ticker {
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
         }
+
+        /* ── FIREBASE STATUS ── */
+        .sync-status {
+            position: fixed; top: 10px; right: 14px;
+            font-size: 0.75em; color: #555; z-index: 2000;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .sync-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: #555;
+        }
+        .sync-dot.connected { background: #27ae60; }
+        .sync-dot.syncing { background: #ff6a00; }
+        .sync-dot.error { background: #c0392b; }
     </style>
 </head>
 <body>
 
-<!-- ADMIN MODE -->
+<!-- SYNC STATUS -->
+<div class="sync-status">
+    <div class="sync-dot" id="syncDot"></div>
+    <span id="syncLabel">Local</span>
+</div>
+
+<!-- ════════════════════════════════════════════
+     ADMIN MODE
+════════════════════════════════════════════ -->
 <div id="adminMode">
     <div class="header">
-        <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="Logo">
-        <h1>Breakdown Leaderboard</h1>
+        <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="BBTF Logo">
+        <h1>BREAKDOWN LEADERBOARD</h1>
     </div>
 
     <div class="tabs-container" id="tabsContainer"></div>
@@ -563,119 +331,291 @@
             <h3>➕ Add Score</h3>
             <div class="form-row">
                 <input type="text" id="playerName" placeholder="Player name..." />
-                <input type="number" id="playerScore" placeholder="Enter score..." step="0.01" min="0" />
-                <button class="btn btn-orange" onclick="addEntry()">Add</button>
+                <input type="number" id="playerScore" placeholder="Score..." step="0.01" />
+                <button class="btn btn-orange" onclick="addEntry()">ADD</button>
             </div>
-            <div style="margin-top:8px; font-size:0.8em; color:#666;" id="scoreHint"></div>
+            <div class="score-hint" id="scoreHint"></div>
         </div>
 
         <div class="leaderboard">
             <div class="leaderboard-header">
                 <h3 id="leaderboardTitle">Leaderboard</h3>
-                <button class="btn btn-red" style="font-size:0.75em; padding:6px 12px;" onclick="clearDrill()">Clear All</button>
+                <button class="btn btn-red" style="font-size:0.75em;padding:6px 12px;" onclick="clearDrill()">CLEAR ALL</button>
             </div>
             <div id="leaderboardBody"></div>
         </div>
     </div>
 </div>
 
-<!-- TV / PRESENTATION MODE -->
+<!-- ════════════════════════════════════════════
+     TV / PRESENTATION MODE
+════════════════════════════════════════════ -->
 <div class="tv-mode" id="tvMode">
     <div class="tv-header">
-        <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="Logo">
-        <h1>Breakdown Leaderboard</h1>
+        <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="BBTF Logo">
+        <h1>BREAKDOWN LEADERBOARD</h1>
     </div>
 
-    <div class="tv-drill-name" id="tvDrillName">Select a Drill</div>
+    <div class="tv-drill-name" id="tvDrillName">SELECT A DRILL</div>
 
-    <!-- ROTATION CONTROLS -->
-    <div class="tv-controls">
-        <button class="tv-prev-btn" onclick="tvPrevDrill()">◀ Prev</button>
-        <span class="tv-drill-indicator" id="tvDrillIndicator">Drill 1 of 1</span>
-        <button class="tv-next-btn" onclick="tvNextDrill()">Next ▶</button>
-        <button class="tv-auto-btn" id="tvAutoBtn" onclick="toggleTvAutoRotate()">▶ Auto Rotate</button>
-    </div>
-
-    <div class="tv-scores-container" id="tvScoresContainer">
-        <table class="tv-table">
+    <div class="tv-scores-container">
+        <table class="tv-scores-table">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Player</th>
-                    <th id="tvScoreHeader">Score</th>
-                    <th>Date</th>
+                    <th style="width:90px;">RANK</th>
+                    <th>PLAYER</th>
+                    <th id="tvScoreHeader" style="width:160px;">SCORE</th>
                 </tr>
             </thead>
             <tbody id="tvScoresBody"></tbody>
         </table>
     </div>
 
+    <div class="tv-rotation-bar">
+        <label>
+            <input type="checkbox" id="autoRotateToggle" onchange="toggleAutoRotate()">
+            AUTO-ROTATE DRILLS
+        </label>
+        <select id="rotateSpeed" onchange="restartAutoRotateIfActive()">
+            <option value="5000">Every 5s</option>
+            <option value="10000" selected>Every 10s</option>
+            <option value="15000">Every 15s</option>
+            <option value="20000">Every 20s</option>
+            <option value="30000">Every 30s</option>
+        </select>
+        <span class="tv-drill-indicator" id="tvDrillIndicator"></span>
+    </div>
+
     <div class="tv-ticker">
-        <span class="tv-ticker-inner" id="tvTicker">BREAKDOWN BASKETBALL — LIVE LEADERBOARD</span>
+        <span class="tv-ticker-inner" id="tvTickerText">🏀 BREAKDOWN BASKETBALL TRAINING FACILITY — LIVE LEADERBOARD 🏀</span>
     </div>
 </div>
 
-<!-- MODE TOGGLE -->
+<!-- ════════════════════════════════════════════
+     MODE TOGGLE (fixed, above ticker)
+════════════════════════════════════════════ -->
 <div class="mode-toggle">
-    <button class="mode-btn active" id="adminModeBtn" onclick="switchMode('admin')">⚙️ Admin</button>
-    <button class="mode-btn" id="tvModeBtn" onclick="switchMode('tv')">📺 TV Mode</button>
+    <button class="mode-btn active" id="adminBtn" onclick="switchMode('admin')">⚙️ ADMIN</button>
+    <button class="mode-btn" id="tvBtn" onclick="switchMode('tv')">📺 TV MODE</button>
 </div>
 
-<!-- MODAL: Add Drill -->
+<!-- ════════════════════════════════════════════
+     ADD DRILL MODAL
+════════════════════════════════════════════ -->
 <div class="modal-overlay" id="addDrillModal">
     <div class="modal">
         <h2>➕ New Drill</h2>
-        <input type="text" id="newDrillName" placeholder="Drill name..." oninput="validateDrillForm()" />
+        <label>Drill Name</label>
+        <input type="text" id="newDrillName" placeholder="e.g. 30sec Lane Touch" oninput="validateDrillForm()" />
+        <label>Scoring Type</label>
         <select id="newDrillType" onchange="validateDrillForm()">
-            <option value="">-- Select scoring type --</option>
-            <option value="time">Time (lower is better)</option>
-            <option value="count">Count (higher is better)</option>
+            <option value="">-- Select type --</option>
+            <option value="time">⏱️ Time — lower is better</option>
+            <option value="count">📊 Count — higher is better</option>
         </select>
         <div class="modal-buttons">
-            <button class="modal-cancel" onclick="closeAddDrillModal()">Cancel</button>
-            <button class="modal-confirm" id="createDrillBtn" onclick="createDrill()" disabled>Create Drill</button>
+            <button class="modal-cancel" onclick="closeAddDrillModal()">CANCEL</button>
+            <button class="modal-confirm" id="createDrillBtn" onclick="confirmAddDrill()" disabled>CREATE DRILL</button>
         </div>
     </div>
 </div>
 
-<!-- MODAL: Edit Entry -->
+<!-- ════════════════════════════════════════════
+     EDIT ENTRY MODAL
+════════════════════════════════════════════ -->
 <div class="modal-overlay" id="editModal">
     <div class="modal">
         <h2>✏️ Edit Score</h2>
+        <label>Player Name</label>
         <input type="text" id="editPlayerName" placeholder="Player name..." />
-        <input type="number" id="editPlayerScore" placeholder="Score..." step="0.01" min="0" />
+        <label>Score</label>
+        <input type="number" id="editPlayerScore" placeholder="Score..." step="0.01" />
         <div class="modal-buttons">
-            <button class="modal-cancel" onclick="closeEditModal()">Cancel</button>
-            <button class="modal-confirm" onclick="saveEdit()">Save</button>
+            <button class="modal-cancel" onclick="closeEditModal()">CANCEL</button>
+            <button class="modal-confirm" onclick="confirmEdit()">SAVE CHANGES</button>
         </div>
     </div>
 </div>
 
-<script>
-    // ── DATA ──────────────────────────────────────────────────────────────────
-    let drills = JSON.parse(localStorage.getItem('bbDrills')) || [
-        { id: 'drill1', name: '30sec Lane Touch', type: 'count', entries: [] },
-        { id: 'drill2', name: '17s Drill', type: 'time', entries: [] },
-        { id: 'drill3', name: '2min Round The World', type: 'time', entries: [] },
-        { id: 'drill4', name: '45 Do or Die', type: 'time', entries: [] }
-    ];
+<!-- ════════════════════════════════════════════
+     FIREBASE SDK
+════════════════════════════════════════════ -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    let currentDrillId = drills[0]?.id || null;
-    let editingEntryId = null;
+    // ── PASTE YOUR FIREBASE CONFIG HERE ──────────────────────────────────────
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
+        databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+    // ─────────────────────────────────────────────────────────────────────────
 
-    // TV rotation state
-    let tvDrillIndex = 0;
-    let tvAutoRotate = false;
-    let tvAutoInterval = null;
+    let firebaseEnabled = false;
+    let db = null;
+    let dbRef = null;
 
-    // ── PERSISTENCE ───────────────────────────────────────────────────────────
-    function saveData() {
-        localStorage.setItem('bbDrills', JSON.stringify(drills));
+    try {
+        const app = initializeApp(firebaseConfig);
+        db = getDatabase(app);
+        dbRef = ref(db, 'leaderboard');
+        firebaseEnabled = true;
+    } catch(e) {
+        console.warn('Firebase init failed, using localStorage only.', e);
     }
 
-    // ── HELPERS ───────────────────────────────────────────────────────────────
+    // Expose to global scope
+    window._firebase = { enabled: firebaseEnabled, db, dbRef, set, onValue, ref };
+
+    if (firebaseEnabled) {
+        setSyncStatus('syncing', 'Connecting...');
+        onValue(dbRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data && Array.isArray(data)) {
+                window._drills = data;
+                localStorage.setItem('bbDrills', JSON.stringify(data));
+                setSyncStatus('connected', 'Live ✓');
+                if (window._appReady) window.renderAll();
+            } else {
+                setSyncStatus('connected', 'Live ✓');
+                if (window._appReady) window.pushToFirebase();
+            }
+        }, (err) => {
+            setSyncStatus('error', 'Offline');
+            console.error(err);
+        });
+    }
+
+    window.pushToFirebase = function() {
+        if (firebaseEnabled && db && dbRef) {
+            set(dbRef, window._drills).catch(e => console.error('Firebase write error', e));
+        }
+    };
+
+    function setSyncStatus(state, label) {
+        const dot = document.getElementById('syncDot');
+        const lbl = document.getElementById('syncLabel');
+        dot.className = 'sync-dot ' + state;
+        lbl.textContent = label;
+    }
+    window.setSyncStatus = setSyncStatus;
+</script>
+
+<script>
+    // ════════════════════════════════════════════════════════════════════════
+    // DATA
+    // ════════════════════════════════════════════════════════════════════════
+    const DEFAULT_DRILLS = [
+        { id: 'lane30',  name: '30sec Lane Touch',    type: 'count', entries: [] },
+        { id: 'drill17', name: '17s',                 type: 'time',  entries: [] },
+        { id: 'round2',  name: '2min Round The World',type: 'time',  entries: [] },
+        { id: 'dod45',   name: '45 Do Or Die',        type: 'time',  entries: [] }
+    ];
+
+    window._drills = JSON.parse(localStorage.getItem('bbDrills')) || DEFAULT_DRILLS;
+
+    // Proxy so all reads/writes go through window._drills
+    function getDrills()          { return window._drills; }
+    function setDrills(d)         { window._drills = d; }
+
+    let currentDrillId  = getDrills()[0].id;
+    let editingEntryId  = null;
+    let autoRotateInterval = null;
+    let currentTvDrillIndex = 0;
+
+    function saveData() {
+        localStorage.setItem('bbDrills', JSON.stringify(getDrills()));
+        if (window.pushToFirebase) window.pushToFirebase();
+    }
+
     function getCurrentDrill() {
-        return drills.find(d => d.id === currentDrillId);
+        return getDrills().find(d => d.id === currentDrillId);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // TABS
+    // ════════════════════════════════════════════════════════════════════════
+    function renderTabs() {
+        const container = document.getElementById('tabsContainer');
+        container.innerHTML = '';
+
+        getDrills().forEach(drill => {
+            const btn = document.createElement('div');
+            btn.className = 'tab-btn' + (drill.id === currentDrillId ? ' active' : '');
+            btn.innerHTML = `
+                <span onclick="switchDrill('${drill.id}')">${drill.name}</span>
+                <button class="tab-delete" onclick="deleteDrill('${drill.id}')" title="Delete drill">✕</button>
+            `;
+            container.appendChild(btn);
+        });
+
+        const addBtn = document.createElement('button');
+        addBtn.className = 'add-drill-tab';
+        addBtn.textContent = '+ NEW DRILL';
+        addBtn.onclick = openAddDrillModal;
+        container.appendChild(addBtn);
+    }
+
+    function switchDrill(id) {
+        currentDrillId = id;
+        renderAll();
+    }
+
+    function deleteDrill(id) {
+        const drills = getDrills();
+        if (drills.length <= 1) { alert('You must keep at least one drill.'); return; }
+        if (!confirm('Delete this drill and ALL its scores? This cannot be undone.')) return;
+        setDrills(drills.filter(d => d.id !== id));
+        if (currentDrillId === id) currentDrillId = getDrills()[0].id;
+        saveData();
+        renderAll();
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // STATS
+    // ════════════════════════════════════════════════════════════════════════
+    function renderStats() {
+        const drill   = getCurrentDrill();
+        const sorted  = getSortedEntries(drill);
+        const leader  = sorted[0];
+        const allEntries = getDrills().reduce((sum, d) => sum + d.entries.length, 0);
+
+        document.getElementById('statsBar').innerHTML = `
+            <div class="stat-card">
+                <div class="label">Entries (This Drill)</div>
+                <div class="value">${drill.entries.length}</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Current Leader</div>
+                <div class="value">${leader ? leader.name : '—'}</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Best ${drill.type === 'count' ? 'Count' : 'Time'}</div>
+                <div class="value">${leader ? formatScore(leader.score, drill.type) : '—'}</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Total Drills</div>
+                <div class="value">${getDrills().length}</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Total Entries</div>
+                <div class="value">${allEntries}</div>
+            </div>
+        `;
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // HELPERS
+    // ════════════════════════════════════════════════════════════════════════
+    function getSortedEntries(drill) {
+        return [...drill.entries].sort((a, b) =>
+            drill.type === 'count' ? b.score - a.score : a.score - b.score
+        );
     }
 
     function formatScore(score, type) {
@@ -683,106 +623,327 @@
         return parseInt(score);
     }
 
-    function generateId() {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2);
-    }
-
-    function formatDateTime(ts) {
-        if (!ts) return '';
-        const d = new Date(ts);
-        return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' }) +
-               ' ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
-    }
-
-    function getSortedEntries(drill) {
-        const sorted = [...drill.entries];
-        if (drill.type === 'count') sorted.sort((a,b) => b.score - a.score);
-        else sorted.sort((a,b) => a.score - b.score);
-        return sorted.slice(0, 50);
-    }
-
-    // ── TABS ──────────────────────────────────────────────────────────────────
-    function renderTabs() {
-        const container = document.getElementById('tabsContainer');
-        container.innerHTML = '';
-        drills.forEach(drill => {
-            const btn = document.createElement('button');
-            btn.className = 'tab-btn' + (drill.id === currentDrillId ? ' active' : '');
-            btn.innerHTML = `<span onclick="switchDrill('${drill.id}')">${drill.name}</span>
-                <button class="tab-delete" onclick="deleteDrill('${drill.id}')" title="Delete drill">✕</button>`;
-            container.appendChild(btn);
+    function nowTimestamp() {
+        return new Date().toLocaleString('en-AU', {
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
         });
-        const addBtn = document.createElement('button');
-        addBtn.className = 'add-drill-tab';
-        addBtn.textContent = '+ New Drill';
-        addBtn.onclick = openAddDrillModal;
-        container.appendChild(addBtn);
     }
 
-    function switchDrill(id) {
-        currentDrillId = id;
-        renderTabs();
-        renderLeaderboard();
-        renderStats();
-        updateScoreHint();
-    }
-
-    // ── STATS ─────────────────────────────────────────────────────────────────
-    function renderStats() {
-        const drill = getCurrentDrill();
-        const statsBar = document.getElementById('statsBar');
-        if (!drill) { statsBar.innerHTML = ''; return; }
-        const sorted = getSortedEntries(drill);
-        const leader = sorted[0];
-        statsBar.innerHTML = `
-            <div class="stat-card">
-                <div class="label">Entries</div>
-                <div class="value">${drill.entries.length}</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Leader</div>
-                <div class="value">${leader ? leader.name : '—'}</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Best Score</div>
-                <div class="value">${leader ? formatScore(leader.score, drill.type) : '—'}</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Total Drills</div>
-                <div class="value">${drills.length}</div>
-            </div>`;
-    }
-
-    // ── SCORE HINT ────────────────────────────────────────────────────────────
-    function updateScoreHint() {
-        const drill = getCurrentDrill();
-        const hint = document.getElementById('scoreHint');
-        const input = document.getElementById('playerScore');
-        if (!drill) return;
-        if (drill.type === 'time') {
-            hint.textContent = '⏱ Enter time in seconds (e.g. 20.45) — lower is better';
-            input.placeholder = 'Time (seconds)...';
-        } else {
-            hint.textContent = '🔢 Enter count/reps — higher is better';
-            input.placeholder = 'Count / Reps...';
-        }
-    }
-
-    // ── ADD ENTRY ─────────────────────────────────────────────────────────────
+    // ════════════════════════════════════════════════════════════════════════
+    // ADD ENTRY
+    // ════════════════════════════════════════════════════════════════════════
     function addEntry() {
+        const drill    = getCurrentDrill();
+        const name     = document.getElementById('playerName').value.trim();
+        const scoreRaw = document.getElementById('playerScore').value.trim();
+
+        if (!name)            { alert('Please enter a player name.'); return; }
+        if (!scoreRaw)        { alert('Please enter a score.'); return; }
+        const score = parseFloat(scoreRaw);
+        if (isNaN(score) || score < 0) { alert('Please enter a valid positive score.'); return; }
+
+        // Determine if this is a personal best
+        const playerEntries = drill.entries.filter(e => e.name.toLowerCase() === name.toLowerCase());
+        let isPB = playerEntries.length === 0; // First entry is always a PB
+
+        if (!isPB) {
+            const best = playerEntries.reduce((b, e) =>
+                drill.type === 'count' ? (e.score > b.score ? e : b) : (e.score < b.score ? e : b)
+            );
+            isPB = drill.type === 'count' ? score > best.score : score < best.score;
+        }
+
+        const entry = {
+            id:        Date.now().toString(),
+            name,
+            score,
+            isPB,
+            timestamp: nowTimestamp()
+        };
+
+        drill.entries.push(entry);
+
+        // Keep top 50 only
+        if (drill.entries.length > 50) {
+            drill.entries = getSortedEntries(drill).slice(0, 50);
+        }
+
+        saveData();
+        document.getElementById('playerName').value  = '';
+        document.getElementById('playerScore').value = '';
+        renderAll();
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // DELETE / CLEAR
+    // ════════════════════════════════════════════════════════════════════════
+    function deleteEntry(id) {
+        if (!confirm('Remove this entry?')) return;
         const drill = getCurrentDrill();
-        if (!drill) return;
-        const name = document.getElementById('playerName').value.trim();
-        const score = parseFloat(document.getElementById('playerScore').value);
-        if (!name || isNaN(score) || score < 0) {
-            alert('Please enter a valid name and score.');
+        drill.entries = drill.entries.filter(e => e.id !== id);
+        saveData();
+        renderAll();
+    }
+
+    function clearDrill() {
+        if (!confirm('Clear ALL entries for this drill? This cannot be undone.')) return;
+        getCurrentDrill().entries = [];
+        saveData();
+        renderAll();
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // EDIT ENTRY
+    // ════════════════════════════════════════════════════════════════════════
+    function openEditModal(id) {
+        const drill = getCurrentDrill();
+        const entry = drill.entries.find(e => e.id === id);
+        if (!entry) return;
+        editingEntryId = id;
+        document.getElementById('editPlayerName').value  = entry.name;
+        document.getElementById('editPlayerScore').value = entry.score;
+        document.getElementById('editModal').classList.add('active');
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').classList.remove('active');
+        editingEntryId = null;
+    }
+
+    function confirmEdit() {
+        const drill = getCurrentDrill();
+        const entry = drill.entries.find(e => e.id === editingEntryId);
+        if (!entry) return;
+
+        const name     = document.getElementById('editPlayerName').value.trim();
+        const scoreRaw = document.getElementById('editPlayerScore').value.trim();
+        if (!name || !scoreRaw) { alert('Please fill in all fields.'); return; }
+        const score = parseFloat(scoreRaw);
+        if (isNaN(score) || score < 0) { alert('Invalid score.'); return; }
+
+        entry.name      = name;
+        entry.score     = score;
+        entry.timestamp = nowTimestamp();
+
+        // Recalculate PB for this player
+        const playerEntries = drill.entries.filter(e => e.name.toLowerCase() === name.toLowerCase());
+        playerEntries.forEach(e => e.isPB = false);
+        const best = playerEntries.reduce((b, e) =>
+            drill.type === 'count' ? (e.score > b.score ? e : b) : (e.score < b.score ? e : b)
+        );
+        best.isPB = true;
+
+        saveData();
+        closeEditModal();
+        renderAll();
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // LEADERBOARD RENDER
+    // ════════════════════════════════════════════════════════════════════════
+    function renderLeaderboard() {
+        const drill  = getCurrentDrill();
+        const sorted = getSortedEntries(drill);
+
+        document.getElementById('leaderboardTitle').textContent =
+            `${drill.name} — TOP ${Math.min(sorted.length, 50)}`;
+
+        document.getElementById('scoreHint').textContent =
+            drill.type === 'count'
+                ? '📊 Count-based drill — higher score is better'
+                : '⏱️ Time-based drill — lower time is better (e.g. 20.35)';
+
+        const body = document.getElementById('leaderboardBody');
+
+        if (sorted.length === 0) {
+            body.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">🏀</div>
+                    <div>No entries yet — add the first score!</div>
+                </div>`;
             return;
         }
 
-        // Check if this is a PB for this player
-        const playerEntries = drill.entries.filter(e => e.name.toLowerCase() === name.toLowerCase());
-        let isPB = false;
-        if (playerEntries.length === 0) {
-            isPB = true;
+        const scoreClass = drill.type === 'count' ? 'score-count' : 'score-time';
+        const scoreLabel = drill.type === 'count' ? 'COUNT' : 'TIME';
+
+        let html = `<table>
+            <thead><tr>
+                <th>RANK</th>
+                <th>PLAYER</th>
+                <th>${scoreLabel}</th>
+                <th>DATE / TIME</th>
+                <th></th>
+            </tr></thead><tbody>`;
+
+        sorted.forEach((entry, i) => {
+            const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+            const medal     = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`;
+            const pb        = entry.isPB ? '<span class="pb-badge">NEW PB 🔥</span>' : '';
+
+            html += `<tr>
+                <td class="${rankClass}">${medal}</td>
+                <td>${entry.name}${pb}</td>
+                <td class="${scoreClass}">${formatScore(entry.score, drill.type)}</td>
+                <td class="timestamp">${entry.timestamp || ''}</td>
+                <td>
+                    <button class="edit-entry-btn"   onclick="openEditModal('${entry.id}')" title="Edit">✏️</button>
+                    <button class="delete-entry-btn" onclick="deleteEntry('${entry.id}')"   title="Delete">🗑️</button>
+                </td>
+            </tr>`;
+        });
+
+        html += '</tbody></table>';
+        body.innerHTML = html;
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // TV MODE RENDER
+    // ════════════════════════════════════════════════════════════════════════
+    function renderTvMode(index) {
+        const drills = getDrills();
+        if (!drills.length) return;
+
+        if (index !== undefined) currentTvDrillIndex = index;
+        if (currentTvDrillIndex >= drills.length) currentTvDrillIndex = 0;
+
+        const drill  = drills[currentTvDrillIndex];
+        const sorted = getSortedEntries(drill);
+
+        document.getElementById('tvDrillName').textContent    = drill.name.toUpperCase();
+        document.getElementById('tvScoreHeader').textContent  = drill.type === 'count' ? 'COUNT' : 'TIME';
+        document.getElementById('tvDrillIndicator').textContent =
+            `DRILL ${currentTvDrillIndex + 1} / ${drills.length}`;
+
+        const body = document.getElementById('tvScoresBody');
+
+        if (sorted.length === 0) {
+            body.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#555;padding:40px;font-size:1.2em;">No scores yet</td></tr>`;
         } else {
-            const best = drill
+            body.innerHTML = sorted.map((entry, i) => {
+                const rankClass  = i === 0 ? 'tv-rank-1' : i === 1 ? 'tv-rank-2' : i === 2 ? 'tv-rank-3' : '';
+                const medal      = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`;
+                const scoreClass = drill.type === 'count' ? 'tv-score tv-score-count' : 'tv-score';
+                const pb         = entry.isPB ? '<span class="tv-pb">PB 🔥</span>' : '';
+                return `<tr>
+                    <td class="tv-rank ${rankClass}">${medal}</td>
+                    <td class="tv-name">${entry.name}${pb}</td>
+                    <td class="${scoreClass}">${formatScore(entry.score, drill.type)}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        // Update ticker with leaders from all drills
+        const parts = drills.map(d => {
+            const s = getSortedEntries(d);
+            return s[0]
+                ? `${d.name.toUpperCase()}: 🥇 ${s[0].name} — ${formatScore(s[0].score, d.type)}`
+                : `${d.name.toUpperCase()}: No scores yet`;
+        });
+        document.getElementById('tvTickerText').textContent =
+            '🏀  ' + parts.join('     •     ') + '     🏀';
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // AUTO ROTATE
+    // ════════════════════════════════════════════════════════════════════════
+    function toggleAutoRotate() {
+        const enabled = document.getElementById('autoRotateToggle').checked;
+        enabled ? startAutoRotate() : stopAutoRotate();
+    }
+
+    function startAutoRotate() {
+        stopAutoRotate();
+        const speed = parseInt(document.getElementById('rotateSpeed').value);
+        autoRotateInterval = setInterval(() => {
+            currentTvDrillIndex = (currentTvDrillIndex + 1) % getDrills().length;
+            renderTvMode();
+        }, speed);
+    }
+
+    function stopAutoRotate() {
+        if (autoRotateInterval) { clearInterval(autoRotateInterval); autoRotateInterval = null; }
+    }
+
+    function restartAutoRotateIfActive() {
+        if (document.getElementById('autoRotateToggle').checked) startAutoRotate();
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // MODE SWITCH
+    // ════════════════════════════════════════════════════════════════════════
+    function switchMode(mode) {
+        if (mode === 'tv') {
+            document.getElementById('tvMode').classList.add('active');
+            document.getElementById('adminMode').style.display = 'none';
+            document.getElementById('tvBtn').classList.add('active');
+            document.getElementById('adminBtn').classList.remove('active');
+            // Start on the currently selected admin drill
+            currentTvDrillIndex = Math.max(0, getDrills().findIndex(d => d.id === currentDrillId));
+            renderTvMode();
+        } else {
+            document.getElementById('tvMode').classList.remove('active');
+            document.getElementById('adminMode').style.display = 'block';
+            document.getElementById('adminBtn').classList.add('active');
+            document.getElementById('tvBtn').classList.remove('active');
+            stopAutoRotate();
+            document.getElementById('autoRotateToggle').checked = false;
+            renderAll();
+        }
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // ADD DRILL MODAL
+    // ════════════════════════════════════════════════════════════════════════
+    function openAddDrillModal() {
+        document.getElementById('newDrillName').value  = '';
+        document.getElementById('newDrillType').value  = '';
+        document.getElementById('createDrillBtn').disabled = true;
+        document.getElementById('addDrillModal').classList.add('active');
+        setTimeout(() => document.getElementById('newDrillName').focus(), 100);
+    }
+
+    function closeAddDrillModal() {
+        document.getElementById('addDrillModal').classList.remove('active');
+    }
+
+    function validateDrillForm() {
+        const name = document.getElementById('newDrillName').value.trim();
+        const type = document.getElementById('newDrillType').value;
+        document.getElementById('createDrillBtn').disabled = !(name && type);
+    }
+
+    function confirmAddDrill() {
+        const name = document.getElementById('newDrillName').value.trim();
+        const type = document.getElementById('newDrillType').value;
+        if (!name || !type) return;
+
+        const newDrill = { id: 'drill_' + Date.now(), name, type, entries: [] };
+        getDrills().push(newDrill);
+        currentDrillId = newDrill.id;
+        saveData();
+        closeAddDrillModal();
+        renderAll();
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // RENDER ALL
+    // ════════════════════════════════════════════════════════════════════════
+    function renderAll() {
+        renderTabs();
+        renderStats();
+        renderLeaderboard();
+    }
+
+    // Expose to global for Firebase callback
+    window.renderAll = renderAll;
+
+    // ════════════════════════════════════════════════════════════════════════
+    // INIT
+    // ════════════════════════════════════════════════════════════════════════
+    window._appReady = true;
+    renderAll();
+</script>
+</body>
+</html>
