@@ -13,13 +13,13 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #1a1a2e;
+            background: #0d0d0d;
             color: #ffffff;
             min-height: 100vh;
         }
 
         .header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, #0d0d0d 0%, #111111 100%);
             padding: 20px;
             text-align: center;
             border-bottom: 3px solid #ff6a00;
@@ -43,12 +43,12 @@
             justify-content: center;
             gap: 20px;
             padding: 15px 20px;
-            background: #16213e;
+            background: #111111;
             flex-wrap: wrap;
         }
 
         .stat-card {
-            background: #0f3460;
+            background: #1a1a1a;
             border: 1px solid #ff6a00;
             border-radius: 8px;
             padding: 10px 20px;
@@ -71,7 +71,7 @@
 
         .tabs-container {
             padding: 15px 20px 0;
-            background: #1a1a2e;
+            background: #0d0d0d;
         }
 
         .tabs {
@@ -86,7 +86,7 @@
             align-items: center;
             gap: 5px;
             padding: 10px 16px;
-            background: #0f3460;
+            background: #1a1a1a;
             border: 1px solid #ff6a00;
             border-bottom: none;
             border-radius: 8px 8px 0 0;
@@ -140,7 +140,7 @@
         .drill-panel.active { display: block; }
 
         .add-score-form {
-            background: #16213e;
+            background: #111111;
             border: 1px solid #ff6a00;
             border-radius: 12px;
             padding: 20px;
@@ -165,7 +165,7 @@
             flex: 1;
             min-width: 150px;
             padding: 10px 15px;
-            background: #0f3460;
+            background: #1a1a1a;
             border: 1px solid #ff6a00;
             border-radius: 8px;
             color: #fff;
@@ -196,11 +196,11 @@
         .btn-primary:hover { background: #ff9a40; transform: translateY(-1px); }
         .btn-danger { background: #c0392b; color: #fff; }
         .btn-danger:hover { background: #e74c3c; }
-        .btn-secondary { background: #0f3460; color: #fff; border: 1px solid #ff6a00; }
-        .btn-secondary:hover { background: #1a4a8a; }
+        .btn-secondary { background: #1a1a1a; color: #fff; border: 1px solid #ff6a00; }
+        .btn-secondary:hover { background: #2a2a2a; }
 
         .leaderboard-container {
-            background: #16213e;
+            background: #111111;
             border: 1px solid #ff6a00;
             border-radius: 12px;
             overflow: hidden;
@@ -226,7 +226,7 @@
         }
 
         .leaderboard-table th {
-            background: #0f3460;
+            background: #1a1a1a;
             padding: 10px 15px;
             text-align: left;
             font-size: 0.8em;
@@ -257,7 +257,7 @@
         .rank-1 { background: #FFD700; color: #000; }
         .rank-2 { background: #C0C0C0; color: #000; }
         .rank-3 { background: #CD7F32; color: #fff; }
-        .rank-other { background: #0f3460; color: #fff; }
+        .rank-other { background: #1a1a1a; color: #fff; }
 
         .score-time { color: #4ecdc4; font-weight: bold; }
         .score-count { color: #2ecc71; font-weight: bold; }
@@ -329,7 +329,7 @@
         }
 
         .mode-btn.active { background: #ff6a00; color: #fff; }
-        .mode-btn:not(.active) { background: rgba(26, 26, 46, 0.95); color: #ff6a00; }
+        .mode-btn:not(.active) { background: rgba(13, 13, 13, 0.95); color: #ff6a00; }
         .mode-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 106, 0, 0.4); }
 
         .tv-mode {
@@ -337,7 +337,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: #0a0a1a;
+            background: #000000;
             z-index: 500;
             flex-direction: column;
             overflow: hidden;
@@ -346,7 +346,7 @@
         .tv-mode.active { display: flex; }
 
         .tv-header {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            background: linear-gradient(135deg, #0d0d0d, #111111);
             padding: 20px 40px;
             text-align: center;
             border-bottom: 4px solid #ff6a00;
@@ -376,7 +376,7 @@
             align-items: center;
             gap: 12px;
             padding: 12px 20px;
-            background: #16213e;
+            background: #111111;
             border-bottom: 2px solid rgba(255,106,0,0.3);
             flex-shrink: 0;
             flex-wrap: wrap;
@@ -384,7 +384,7 @@
 
         .tv-drill-nav-btn {
             padding: 8px 18px;
-            background: #0f3460;
+            background: #1a1a1a;
             border: 2px solid #ff6a00;
             border-radius: 20px;
             color: #fff;
@@ -422,7 +422,7 @@
             align-items: center;
             gap: 15px;
             padding: 8px 20px;
-            background: #0f3460;
+            background: #1a1a1a;
             border-bottom: 1px solid rgba(255,106,0,0.2);
             flex-shrink: 0;
             flex-wrap: wrap;
@@ -436,7 +436,7 @@
         }
 
         .tv-rotation-controls select {
-            background: #1a1a2e;
+            background: #0d0d0d;
             border: 1px solid #ff6a00;
             color: #fff;
             padding: 4px 10px;
@@ -474,11 +474,11 @@
             flex: 1;
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: #ff6a00 #1a1a2e;
+            scrollbar-color: #ff6a00 #0d0d0d;
         }
 
         .tv-scores-container::-webkit-scrollbar { width: 6px; }
-        .tv-scores-container::-webkit-scrollbar-track { background: #1a1a2e; }
+        .tv-scores-container::-webkit-scrollbar-track { background: #0d0d0d; }
         .tv-scores-container::-webkit-scrollbar-thumb { background: #ff6a00; border-radius: 3px; }
 
         .tv-score-row {
@@ -553,7 +553,7 @@
         .modal-overlay.active { display: flex; }
 
         .modal {
-            background: #16213e;
+            background: #111111;
             border: 2px solid #ff6a00;
             border-radius: 16px;
             padding: 30px;
@@ -585,14 +585,14 @@
         .modal .form-group select {
             width: 100%;
             padding: 10px 15px;
-            background: #0f3460;
+            background: #1a1a1a;
             border: 1px solid #ff6a00;
             border-radius: 8px;
             color: #fff;
             font-size: 1em;
         }
 
-        .modal .form-group select option { background: #0f3460; }
+        .modal .form-group select option { background: #1a1a1a; }
 
         .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
 
@@ -840,7 +840,7 @@ function switchDrill(drillId) {
 }
 
 // ============================================================
-// PANELS — key fix: use data attributes instead of inline onclick strings
+// PANELS
 // ============================================================
 function renderPanels() {
     const panelsEl = document.getElementById('drillPanels');
@@ -855,7 +855,6 @@ function renderPanels() {
         const scorePlaceholder = drill.type === 'count' ? 'e.g. 42' : 'e.g. 20.5';
         const directionHint = drill.type === 'time' ? '— Lower is better ⬇️' : '— Higher is better ⬆️';
 
-        // ---- Form ----
         const formDiv = document.createElement('div');
         formDiv.className = 'add-score-form';
 
@@ -886,7 +885,6 @@ function renderPanels() {
             addScore(this.getAttribute('data-drill-id'));
         });
 
-        // Allow Enter key on inputs to submit
         nameInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') addScore(drill.id);
         });
@@ -906,7 +904,6 @@ function renderPanels() {
 
         panel.appendChild(formDiv);
 
-        // ---- Controls ----
         const controlsDiv = document.createElement('div');
         controlsDiv.className = 'drill-controls';
 
@@ -921,7 +918,6 @@ function renderPanels() {
         controlsDiv.appendChild(clearBtn);
         panel.appendChild(controlsDiv);
 
-        // ---- Leaderboard ----
         const lbContainer = document.createElement('div');
         lbContainer.className = 'leaderboard-container';
 
@@ -1011,13 +1007,11 @@ function renderLeaderboard(drillId) {
             <td><span class="timestamp">${dateStr}<br>${timeStr}</span></td>
             <td></td>`;
 
-        // Edit button
         const editBtn = document.createElement('button');
         editBtn.className = 'action-btn edit-btn';
         editBtn.textContent = '✏️';
         editBtn.addEventListener('click', () => openEditModal(drillId, entry.id));
 
-        // Delete button
         const delBtn = document.createElement('button');
         delBtn.className = 'action-btn delete-btn';
         delBtn.textContent = '🗑️';
@@ -1036,7 +1030,7 @@ function renderLeaderboard(drillId) {
 }
 
 // ============================================================
-// ADD SCORE — fully rebuilt with clear validation
+// ADD SCORE
 // ============================================================
 function addScore(drillId) {
     const drill = drills.find(d => d.id === drillId);
@@ -1071,7 +1065,6 @@ function addScore(drillId) {
 
     if (!scores[drillId]) scores[drillId] = [];
 
-    // Personal best check
     const existing = scores[drillId].filter(
         e => e.name.toLowerCase() === name.toLowerCase()
     );
@@ -1099,13 +1092,11 @@ function addScore(drillId) {
     scores[drillId].push(entry);
     saveToLocalStorage();
 
-    // Re-render
     renderLeaderboard(drillId);
     renderStats();
     renderTVMode();
     updateTicker();
 
-    // Clear inputs
     nameEl.value = '';
     scoreEl.value = '';
     nameEl.focus();
