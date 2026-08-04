@@ -332,6 +332,7 @@
         .mode-btn:not(.active) { background: rgba(13, 13, 13, 0.95); color: #ff6a00; }
         .mode-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 106, 0, 0.4); }
 
+        /* ── TV MODE ── */
         .tv-mode {
             display: none;
             position: fixed;
@@ -481,40 +482,66 @@
         .tv-scores-container::-webkit-scrollbar-track { background: #0d0d0d; }
         .tv-scores-container::-webkit-scrollbar-thumb { background: #ff6a00; border-radius: 3px; }
 
+        /* ── TV SCORE ROW — tighter, table-like layout ── */
         .tv-score-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: 70px 1fr auto;
             align-items: center;
-            padding: 12px 20px;
+            padding: 10px 16px;
             border-bottom: 1px solid rgba(255, 106, 0, 0.15);
+            gap: 12px;
+        }
+
+        .tv-score-row:nth-child(odd) {
+            background: rgba(255, 106, 0, 0.04);
         }
 
         .tv-rank {
-            font-size: 1.8em;
+            font-size: 1.6em;
             font-weight: bold;
-            width: 70px;
             text-align: center;
-            flex-shrink: 0;
         }
 
-        .tv-player-name { font-size: 1.6em; flex: 1; font-weight: bold; }
+        .tv-player-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .tv-player-name {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .tv-player-date {
+            font-size: 0.75em;
+            color: #888;
+            letter-spacing: 0.5px;
+        }
+
+        .tv-score-block {
+            text-align: right;
+        }
 
         .tv-score {
-            font-size: 1.8em;
+            font-size: 1.6em;
             font-weight: bold;
             color: #ff6a00;
-            text-align: right;
-            flex-shrink: 0;
+            display: block;
+            line-height: 1.2;
         }
 
         .tv-pb {
-            font-size: 0.6em;
+            font-size: 0.65em;
             background: linear-gradient(135deg, #ff6a00, #ff9a40);
             color: #fff;
-            padding: 3px 10px;
+            padding: 2px 8px;
             border-radius: 12px;
-            margin-left: 10px;
+            display: inline-block;
+            margin-top: 3px;
             animation: pulse 1.5s infinite;
-            vertical-align: middle;
         }
 
         .ticker {
@@ -609,11 +636,12 @@
         @media (max-width: 600px) {
             .header h1 { font-size: 1.5em; }
             .tv-header h1 { font-size: 2em; }
-            .tv-player-name { font-size: 1.2em; }
-            .tv-score { font-size: 1.4em; }
-            .tv-rank { font-size: 1.4em; }
+            .tv-player-name { font-size: 1.1em; }
+            .tv-score { font-size: 1.3em; }
+            .tv-rank { font-size: 1.3em; }
             .main-content { padding: 10px; padding-bottom: 180px; }
             .tv-scores-wrapper { padding: 10px 15px; }
+            .tv-score-row { grid-template-columns: 50px 1fr auto; gap: 8px; }
         }
     </style>
 </head>
@@ -741,9 +769,6 @@
 </div>
 
 <script>
-// ============================================================
-// DATA
-// ============================================================
 let drills = [
     { id: 'drill_1', name: '30sec Lane Touch', type: 'count' },
     { id: 'drill_2', name: '17s', type: 'time' },
@@ -759,9 +784,6 @@ let autoRotateInterval = null;
 let isAutoRotating = false;
 let editingEntry = null;
 
-// ============================================================
-// INIT
-// ============================================================
 function init() {
     loadFromLocalStorage();
     renderAll();
@@ -797,32 +819,24 @@ function renderAll() {
     updateTicker();
 }
 
-// ============================================================
-// TABS
-// ============================================================
 function renderTabs() {
     const tabsEl = document.getElementById('drillTabs');
     tabsEl.innerHTML = '';
-
     drills.forEach(drill => {
         const tab = document.createElement('div');
         tab.className = 'tab' + (drill.id === activeDrillId ? ' active' : '');
-
         const nameSpan = document.createElement('span');
         nameSpan.textContent = drill.name;
         nameSpan.onclick = () => switchDrill(drill.id);
-
         const delBtn = document.createElement('button');
         delBtn.className = 'delete-drill';
         delBtn.textContent = '✕';
         delBtn.title = 'Delete drill';
         delBtn.onclick = (e) => { e.stopPropagation(); deleteDrill(drill.id); };
-
         tab.appendChild(nameSpan);
         tab.appendChild(delBtn);
         tabsEl.appendChild(tab);
     });
-
     const addTab = document.createElement('div');
     addTab.className = 'add-drill-tab';
     addTab.textContent = '+ New Drill';
@@ -839,13 +853,9 @@ function switchDrill(drillId) {
     renderStats();
 }
 
-// ============================================================
-// PANELS
-// ============================================================
 function renderPanels() {
     const panelsEl = document.getElementById('drillPanels');
     panelsEl.innerHTML = '';
-
     drills.forEach(drill => {
         const panel = document.createElement('div');
         panel.className = 'drill-panel' + (drill.id === activeDrillId ? ' active' : '');
@@ -857,7 +867,6 @@ function renderPanels() {
 
         const formDiv = document.createElement('div');
         formDiv.className = 'add-score-form';
-
         const formTitle = document.createElement('h3');
         formTitle.textContent = `➕ Add Score — ${drill.name}`;
         formDiv.appendChild(formTitle);
@@ -881,16 +890,9 @@ function renderPanels() {
         addBtn.className = 'btn btn-primary';
         addBtn.textContent = 'Add Score';
         addBtn.setAttribute('data-drill-id', drill.id);
-        addBtn.addEventListener('click', function() {
-            addScore(this.getAttribute('data-drill-id'));
-        });
-
-        nameInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') addScore(drill.id);
-        });
-        scoreInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') addScore(drill.id);
-        });
+        addBtn.addEventListener('click', function() { addScore(this.getAttribute('data-drill-id')); });
+        nameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') addScore(drill.id); });
+        scoreInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') addScore(drill.id); });
 
         formRow.appendChild(nameInput);
         formRow.appendChild(scoreInput);
@@ -901,48 +903,35 @@ function renderPanels() {
         hint.style.cssText = 'margin-top:8px; font-size:0.8em; color:#888;';
         hint.innerHTML = `📊 Score type: <strong style="color:#ff6a00;">${scoreLabel}</strong> ${directionHint}`;
         formDiv.appendChild(hint);
-
         panel.appendChild(formDiv);
 
         const controlsDiv = document.createElement('div');
         controlsDiv.className = 'drill-controls';
-
         const clearBtn = document.createElement('button');
         clearBtn.className = 'btn btn-danger';
         clearBtn.textContent = '🗑️ Clear All Scores';
         clearBtn.setAttribute('data-drill-id', drill.id);
-        clearBtn.addEventListener('click', function() {
-            clearDrillScores(this.getAttribute('data-drill-id'));
-        });
-
+        clearBtn.addEventListener('click', function() { clearDrillScores(this.getAttribute('data-drill-id')); });
         controlsDiv.appendChild(clearBtn);
         panel.appendChild(controlsDiv);
 
         const lbContainer = document.createElement('div');
         lbContainer.className = 'leaderboard-container';
-
         const lbHeader = document.createElement('div');
         lbHeader.className = 'leaderboard-header';
         lbHeader.innerHTML = `
             <h3>🏆 ${drill.name} — Leaderboard</h3>
-            <span style="font-size:0.85em;">${drill.type === 'count' ? '⬆️ Highest First' : '⬇️ Fastest First'}</span>
-        `;
-
+            <span style="font-size:0.85em;">${drill.type === 'count' ? '⬆️ Highest First' : '⬇️ Fastest First'}</span>`;
         const lbBody = document.createElement('div');
         lbBody.id = 'leaderboard_' + drill.id;
-
         lbContainer.appendChild(lbHeader);
         lbContainer.appendChild(lbBody);
         panel.appendChild(lbContainer);
-
         panelsEl.appendChild(panel);
         renderLeaderboard(drill.id);
     });
 }
 
-// ============================================================
-// LEADERBOARD
-// ============================================================
 function getSortedScores(drillId) {
     const drill = drills.find(d => d.id === drillId);
     if (!drill || !scores[drillId]) return [];
@@ -959,7 +948,6 @@ function renderLeaderboard(drillId) {
     const drill = drills.find(d => d.id === drillId);
     const container = document.getElementById('leaderboard_' + drillId);
     if (!container || !drill) return;
-
     const sorted = getSortedScores(drillId);
 
     if (sorted.length === 0) {
@@ -972,10 +960,8 @@ function renderLeaderboard(drillId) {
     }
 
     const scoreColLabel = drill.type === 'count' ? 'Count' : 'Time';
-
     const table = document.createElement('table');
     table.className = 'leaderboard-table';
-
     table.innerHTML = `
         <thead>
             <tr>
@@ -988,7 +974,6 @@ function renderLeaderboard(drillId) {
         </thead>`;
 
     const tbody = document.createElement('tbody');
-
     sorted.forEach((entry, index) => {
         const rank = index + 1;
         const rankClass = rank <= 3 ? `rank-${rank}` : 'rank-other';
@@ -1017,10 +1002,8 @@ function renderLeaderboard(drillId) {
         delBtn.textContent = '🗑️';
         delBtn.addEventListener('click', () => deleteScore(drillId, entry.id));
 
-        const actionTd = tr.querySelector('td:last-child');
-        actionTd.appendChild(editBtn);
-        actionTd.appendChild(delBtn);
-
+        tr.querySelector('td:last-child').appendChild(editBtn);
+        tr.querySelector('td:last-child').appendChild(delBtn);
         tbody.appendChild(tr);
     });
 
@@ -1029,46 +1012,23 @@ function renderLeaderboard(drillId) {
     container.appendChild(table);
 }
 
-// ============================================================
-// ADD SCORE
-// ============================================================
 function addScore(drillId) {
     const drill = drills.find(d => d.id === drillId);
-    if (!drill) {
-        console.error('Drill not found:', drillId);
-        return;
-    }
-
+    if (!drill) return;
     const nameEl = document.getElementById('playerName_' + drillId);
     const scoreEl = document.getElementById('scoreInput_' + drillId);
-
-    if (!nameEl || !scoreEl) {
-        console.error('Input elements not found for drill:', drillId);
-        return;
-    }
+    if (!nameEl || !scoreEl) return;
 
     const name = nameEl.value.trim();
     const rawScore = scoreEl.value.trim();
     const score = parseFloat(rawScore);
 
-    if (!name) {
-        alert('⚠️ Please enter a player name.');
-        nameEl.focus();
-        return;
-    }
-
-    if (rawScore === '' || isNaN(score) || score < 0) {
-        alert('⚠️ Please enter a valid score (must be a positive number).');
-        scoreEl.focus();
-        return;
-    }
+    if (!name) { alert('⚠️ Please enter a player name.'); nameEl.focus(); return; }
+    if (rawScore === '' || isNaN(score) || score < 0) { alert('⚠️ Please enter a valid score.'); scoreEl.focus(); return; }
 
     if (!scores[drillId]) scores[drillId] = [];
 
-    const existing = scores[drillId].filter(
-        e => e.name.toLowerCase() === name.toLowerCase()
-    );
-
+    const existing = scores[drillId].filter(e => e.name.toLowerCase() === name.toLowerCase());
     let isPB = false;
     if (existing.length === 0) {
         isPB = true;
@@ -1076,35 +1036,26 @@ function addScore(drillId) {
         const bestExisting = drill.type === 'count'
             ? Math.max(...existing.map(e => e.score))
             : Math.min(...existing.map(e => e.score));
-        isPB = drill.type === 'count'
-            ? score > bestExisting
-            : score < bestExisting;
+        isPB = drill.type === 'count' ? score > bestExisting : score < bestExisting;
     }
 
     const entry = {
         id: 'entry_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-        name,
-        score,
-        isPB,
+        name, score, isPB,
         timestamp: Date.now()
     };
 
     scores[drillId].push(entry);
     saveToLocalStorage();
-
     renderLeaderboard(drillId);
     renderStats();
     renderTVMode();
     updateTicker();
-
     nameEl.value = '';
     scoreEl.value = '';
     nameEl.focus();
 }
 
-// ============================================================
-// DELETE SCORE
-// ============================================================
 function deleteScore(drillId, entryId) {
     if (!confirm('Delete this score?')) return;
     scores[drillId] = scores[drillId].filter(e => e.id !== entryId);
@@ -1115,9 +1066,6 @@ function deleteScore(drillId, entryId) {
     updateTicker();
 }
 
-// ============================================================
-// CLEAR ALL SCORES
-// ============================================================
 function clearDrillScores(drillId) {
     const drill = drills.find(d => d.id === drillId);
     if (!drill) return;
@@ -1130,31 +1078,22 @@ function clearDrillScores(drillId) {
     updateTicker();
 }
 
-// ============================================================
-// DELETE DRILL
-// ============================================================
 function deleteDrill(drillId) {
     const drill = drills.find(d => d.id === drillId);
     if (!drill) return;
     if (!confirm(`Delete drill "${drill.name}" and all its scores?`)) return;
     drills = drills.filter(d => d.id !== drillId);
     delete scores[drillId];
-    if (activeDrillId === drillId) {
-        activeDrillId = drills.length > 0 ? drills[0].id : null;
-    }
+    if (activeDrillId === drillId) activeDrillId = drills.length > 0 ? drills[0].id : null;
     if (tvDrillIndex >= drills.length) tvDrillIndex = 0;
     saveToLocalStorage();
     renderAll();
 }
 
-// ============================================================
-// EDIT SCORE
-// ============================================================
 function openEditModal(drillId, entryId) {
     const drill = drills.find(d => d.id === drillId);
     const entry = (scores[drillId] || []).find(e => e.id === entryId);
     if (!drill || !entry) return;
-
     editingEntry = { drillId, entryId };
     document.getElementById('editPlayerName').value = entry.name;
     document.getElementById('editScoreValue').value = entry.score;
@@ -1172,26 +1111,18 @@ function saveEditedScore() {
 
     const newName = document.getElementById('editPlayerName').value.trim();
     const newScore = parseFloat(document.getElementById('editScoreValue').value);
-
     if (!newName) { alert('Please enter a player name.'); return; }
     if (isNaN(newScore) || newScore < 0) { alert('Please enter a valid score.'); return; }
 
     const others = scores[drillId].filter((e, i) => i !== entryIndex && e.name.toLowerCase() === newName.toLowerCase());
-    let isPB = false;
-    if (others.length === 0) {
-        isPB = true;
-    } else {
-        const bestOther = drill.type === 'count'
-            ? Math.max(...others.map(e => e.score))
-            : Math.min(...others.map(e => e.score));
-        isPB = drill.type === 'count' ? newScore > bestOther : newScore < bestOther;
-    }
+    let isPB = others.length === 0 ? true :
+        drill.type === 'count'
+            ? newScore > Math.max(...others.map(e => e.score))
+            : newScore < Math.min(...others.map(e => e.score));
 
     scores[drillId][entryIndex] = {
         ...scores[drillId][entryIndex],
-        name: newName,
-        score: newScore,
-        isPB,
+        name: newName, score: newScore, isPB,
         timestamp: Date.now()
     };
 
@@ -1204,9 +1135,6 @@ function saveEditedScore() {
     editingEntry = null;
 }
 
-// ============================================================
-// CREATE DRILL
-// ============================================================
 function validateDrillForm() {
     const name = document.getElementById('newDrillName').value.trim();
     const type = document.getElementById('newDrillType').value;
@@ -1217,13 +1145,7 @@ function createDrill() {
     const name = document.getElementById('newDrillName').value.trim();
     const type = document.getElementById('newDrillType').value;
     if (!name || !type) return;
-
-    const newDrill = {
-        id: 'drill_' + Date.now(),
-        name,
-        type
-    };
-
+    const newDrill = { id: 'drill_' + Date.now(), name, type };
     drills.push(newDrill);
     scores[newDrill.id] = [];
     activeDrillId = newDrill.id;
@@ -1235,16 +1157,11 @@ function createDrill() {
     document.getElementById('createDrillBtn').disabled = true;
 }
 
-// ============================================================
-// STATS
-// ============================================================
 function renderStats() {
     document.getElementById('statTotalDrills').textContent = drills.length;
-
     let totalEntries = 0;
     drills.forEach(d => { totalEntries += (scores[d.id] || []).length; });
     document.getElementById('statTotalEntries').textContent = totalEntries;
-
     if (activeDrillId && scores[activeDrillId] && scores[activeDrillId].length > 0) {
         const sorted = getSortedScores(activeDrillId);
         const drill = drills.find(d => d.id === activeDrillId);
@@ -1257,9 +1174,6 @@ function renderStats() {
     }
 }
 
-// ============================================================
-// TV MODE
-// ============================================================
 function renderTVMode() {
     if (drills.length === 0) {
         document.getElementById('tvDrillName').textContent = 'No Drills';
@@ -1267,8 +1181,7 @@ function renderTVMode() {
         return;
     }
     if (tvDrillIndex >= drills.length) tvDrillIndex = 0;
-    const drill = drills[tvDrillIndex];
-    renderTVDrill(drill);
+    renderTVDrill(drills[tvDrillIndex]);
 }
 
 function renderTVDrill(drill) {
@@ -1294,12 +1207,20 @@ function renderTVDrill(drill) {
         const rankDisplay = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
         const scoreDisplay = drill.type === 'time' ? entry.score + 's' : entry.score;
         const pbBadge = entry.isPB ? '<span class="tv-pb">🔥 PB</span>' : '';
+        const dateStr = entry.timestamp
+            ? new Date(entry.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+            : '—';
 
         html += `
             <div class="tv-score-row">
                 <div class="tv-rank">${rankDisplay}</div>
-                <div class="tv-player-name">${entry.name}${pbBadge}</div>
-                <div class="tv-score">${scoreDisplay}</div>
+                <div class="tv-player-info">
+                    <div class="tv-player-name">${entry.name} ${pbBadge}</div>
+                    <div class="tv-player-date">📅 ${dateStr}</div>
+                </div>
+                <div class="tv-score-block">
+                    <span class="tv-score">${scoreDisplay}</span>
+                </div>
             </div>`;
     });
 
@@ -1315,10 +1236,7 @@ function renderTVDrillNav() {
         const btn = document.createElement('button');
         btn.className = 'tv-drill-nav-btn' + (index === tvDrillIndex ? ' active' : '');
         btn.textContent = drill.name;
-        btn.addEventListener('click', () => {
-            tvDrillIndex = index;
-            renderTVMode();
-        });
+        btn.addEventListener('click', () => { tvDrillIndex = index; renderTVMode(); });
         navBtns.appendChild(btn);
     });
 }
@@ -1329,9 +1247,6 @@ function tvNavigate(direction) {
     renderTVMode();
 }
 
-// ============================================================
-// AUTO ROTATE
-// ============================================================
 function toggleAutoRotate() {
     isAutoRotating = !isAutoRotating;
     const btn = document.getElementById('autoRotateBtn');
@@ -1357,19 +1272,13 @@ function startAutoRotate() {
 }
 
 function stopAutoRotate() {
-    if (autoRotateInterval) {
-        clearInterval(autoRotateInterval);
-        autoRotateInterval = null;
-    }
+    if (autoRotateInterval) { clearInterval(autoRotateInterval); autoRotateInterval = null; }
 }
 
 function updateRotateSpeed() {
     if (isAutoRotating) startAutoRotate();
 }
 
-// ============================================================
-// TICKER
-// ============================================================
 function updateTicker() {
     let tickerText = '🏆 BREAKDOWN LEADERBOARD &nbsp;&nbsp;&nbsp; TRAIN HARD. COMPETE HARDER. &nbsp;&nbsp;&nbsp;';
     drills.forEach(drill => {
@@ -1383,16 +1292,12 @@ function updateTicker() {
     if (tickerEl) tickerEl.innerHTML = tickerText;
 }
 
-// ============================================================
-// MODE SWITCH
-// ============================================================
 function switchMode(mode) {
     currentMode = mode;
     const adminMode = document.getElementById('adminMode');
     const tvMode = document.getElementById('tvMode');
     const adminBtn = document.getElementById('adminBtn');
     const tvBtn = document.getElementById('tvBtn');
-
     if (mode === 'tv') {
         adminMode.style.display = 'none';
         tvMode.classList.add('active');
@@ -1407,16 +1312,8 @@ function switchMode(mode) {
     }
 }
 
-// ============================================================
-// MODALS
-// ============================================================
-function openModal(id) {
-    document.getElementById(id).classList.add('active');
-}
-
-function closeModal(id) {
-    document.getElementById(id).classList.remove('active');
-}
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', function(e) {
@@ -1424,9 +1321,6 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
     });
 });
 
-// ============================================================
-// START
-// ============================================================
 init();
 </script>
 </body>
