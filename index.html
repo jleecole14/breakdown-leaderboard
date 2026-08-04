@@ -18,13 +18,11 @@
             min-height: 100vh;
         }
 
-        /* HEADER */
         .header {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 20px;
             text-align: center;
             border-bottom: 3px solid #ff6a00;
-            position: relative;
         }
 
         .header img.logo {
@@ -40,7 +38,6 @@
             text-shadow: 0 0 20px rgba(255, 106, 0, 0.5);
         }
 
-        /* STATS BAR */
         .stats-bar {
             display: flex;
             justify-content: center;
@@ -72,7 +69,6 @@
             color: #ffffff;
         }
 
-        /* TABS */
         .tabs-container {
             padding: 15px 20px 0;
             background: #1a1a2e;
@@ -83,7 +79,6 @@
             gap: 8px;
             flex-wrap: wrap;
             border-bottom: 2px solid #ff6a00;
-            padding-bottom: 0;
         }
 
         .tab {
@@ -101,16 +96,8 @@
             transition: all 0.2s;
         }
 
-        .tab:hover {
-            background: #ff6a00;
-            color: #fff;
-        }
-
-        .tab.active {
-            background: #ff6a00;
-            color: #fff;
-            font-weight: bold;
-        }
+        .tab:hover { background: #ff6a00; color: #fff; }
+        .tab.active { background: #ff6a00; color: #fff; font-weight: bold; }
 
         .tab .delete-drill {
             background: rgba(255,255,255,0.2);
@@ -124,12 +111,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
         }
 
-        .tab .delete-drill:hover {
-            background: rgba(255,0,0,0.6);
-        }
+        .tab .delete-drill:hover { background: rgba(255,0,0,0.6); }
 
         .add-drill-tab {
             padding: 10px 16px;
@@ -143,28 +127,18 @@
             transition: all 0.2s;
         }
 
-        .add-drill-tab:hover {
-            background: rgba(255, 106, 0, 0.2);
-        }
+        .add-drill-tab:hover { background: rgba(255, 106, 0, 0.2); }
 
-        /* MAIN CONTENT */
         .main-content {
             padding: 20px;
             max-width: 900px;
             margin: 0 auto;
-            padding-bottom: 160px;
+            padding-bottom: 180px;
         }
 
-        /* DRILL PANEL */
-        .drill-panel {
-            display: none;
-        }
+        .drill-panel { display: none; }
+        .drill-panel.active { display: block; }
 
-        .drill-panel.active {
-            display: block;
-        }
-
-        /* ADD SCORE FORM */
         .add-score-form {
             background: #16213e;
             border: 1px solid #ff6a00;
@@ -198,9 +172,7 @@
             font-size: 1em;
         }
 
-        .form-row input::placeholder {
-            color: #888;
-        }
+        .form-row input::placeholder { color: #888; }
 
         .form-row input:focus {
             outline: none;
@@ -220,36 +192,13 @@
             letter-spacing: 1px;
         }
 
-        .btn-primary {
-            background: #ff6a00;
-            color: #fff;
-        }
+        .btn-primary { background: #ff6a00; color: #fff; }
+        .btn-primary:hover { background: #ff9a40; transform: translateY(-1px); }
+        .btn-danger { background: #c0392b; color: #fff; }
+        .btn-danger:hover { background: #e74c3c; }
+        .btn-secondary { background: #0f3460; color: #fff; border: 1px solid #ff6a00; }
+        .btn-secondary:hover { background: #1a4a8a; }
 
-        .btn-primary:hover {
-            background: #ff9a40;
-            transform: translateY(-1px);
-        }
-
-        .btn-danger {
-            background: #c0392b;
-            color: #fff;
-        }
-
-        .btn-danger:hover {
-            background: #e74c3c;
-        }
-
-        .btn-secondary {
-            background: #0f3460;
-            color: #fff;
-            border: 1px solid #ff6a00;
-        }
-
-        .btn-secondary:hover {
-            background: #1a4a8a;
-        }
-
-        /* LEADERBOARD TABLE */
         .leaderboard-container {
             background: #16213e;
             border: 1px solid #ff6a00;
@@ -292,9 +241,7 @@
             font-size: 0.95em;
         }
 
-        .leaderboard-table tr:hover {
-            background: rgba(255, 106, 0, 0.05);
-        }
+        .leaderboard-table tr:hover { background: rgba(255, 106, 0, 0.05); }
 
         .rank-badge {
             display: inline-flex;
@@ -331,10 +278,7 @@
             50% { opacity: 0.7; }
         }
 
-        .timestamp {
-            font-size: 0.75em;
-            color: #888;
-        }
+        .timestamp { font-size: 0.75em; color: #888; }
 
         .action-btn {
             background: none;
@@ -351,15 +295,9 @@
         .delete-btn { color: #e74c3c; }
         .delete-btn:hover { background: rgba(231, 76, 60, 0.2); }
 
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #888;
-        }
-
+        .empty-state { text-align: center; padding: 40px; color: #888; }
         .empty-state .icon { font-size: 3em; margin-bottom: 10px; }
 
-        /* DRILL CONTROLS */
         .drill-controls {
             display: flex;
             gap: 10px;
@@ -367,7 +305,6 @@
             flex-wrap: wrap;
         }
 
-        /* MODE TOGGLE */
         .mode-toggle {
             position: fixed;
             bottom: 130px;
@@ -391,22 +328,10 @@
             white-space: nowrap;
         }
 
-        .mode-btn.active {
-            background: #ff6a00;
-            color: #fff;
-        }
+        .mode-btn.active { background: #ff6a00; color: #fff; }
+        .mode-btn:not(.active) { background: rgba(26, 26, 46, 0.95); color: #ff6a00; }
+        .mode-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 106, 0, 0.4); }
 
-        .mode-btn:not(.active) {
-            background: rgba(26, 26, 46, 0.95);
-            color: #ff6a00;
-        }
-
-        .mode-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 106, 0, 0.4);
-        }
-
-        /* TV / PRESENTATION MODE */
         .tv-mode {
             display: none;
             position: fixed;
@@ -418,9 +343,7 @@
             overflow: hidden;
         }
 
-        .tv-mode.active {
-            display: flex;
-        }
+        .tv-mode.active { display: flex; }
 
         .tv-header {
             background: linear-gradient(135deg, #1a1a2e, #16213e);
@@ -430,10 +353,7 @@
             flex-shrink: 0;
         }
 
-        .tv-header img.logo {
-            width: 100px;
-            margin-bottom: 8px;
-        }
+        .tv-header img.logo { width: 100px; margin-bottom: 8px; }
 
         .tv-header h1 {
             font-size: 3em;
@@ -450,7 +370,6 @@
             letter-spacing: 3px;
         }
 
-        /* TV DRILL NAV */
         .tv-drill-nav {
             display: flex;
             justify-content: center;
@@ -477,15 +396,8 @@
             letter-spacing: 1px;
         }
 
-        .tv-drill-nav-btn:hover {
-            background: #ff6a00;
-            transform: translateY(-1px);
-        }
-
-        .tv-drill-nav-btn.active {
-            background: #ff6a00;
-            color: #fff;
-        }
+        .tv-drill-nav-btn:hover { background: #ff6a00; transform: translateY(-1px); }
+        .tv-drill-nav-btn.active { background: #ff6a00; color: #fff; }
 
         .tv-nav-arrow {
             background: none;
@@ -502,12 +414,8 @@
             transition: all 0.2s;
         }
 
-        .tv-nav-arrow:hover {
-            background: #ff6a00;
-            color: #fff;
-        }
+        .tv-nav-arrow:hover { background: #ff6a00; color: #fff; }
 
-        /* TV ROTATION CONTROLS */
         .tv-rotation-controls {
             display: flex;
             justify-content: center;
@@ -549,22 +457,11 @@
             text-transform: uppercase;
         }
 
-        .auto-rotate-btn.active {
-            background: #ff6a00;
-            color: #fff;
-        }
+        .auto-rotate-btn.active { background: #ff6a00; color: #fff; }
+        .auto-rotate-btn:hover { background: #ff6a00; color: #fff; }
 
-        .auto-rotate-btn:hover {
-            background: #ff6a00;
-            color: #fff;
-        }
+        .drill-indicator { color: #888; font-size: 0.8em; }
 
-        .drill-indicator {
-            color: #888;
-            font-size: 0.8em;
-        }
-
-        /* TV SCORES */
         .tv-scores-wrapper {
             flex: 1;
             overflow: hidden;
@@ -580,29 +477,15 @@
             scrollbar-color: #ff6a00 #1a1a2e;
         }
 
-        .tv-scores-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .tv-scores-container::-webkit-scrollbar-track {
-            background: #1a1a2e;
-        }
-
-        .tv-scores-container::-webkit-scrollbar-thumb {
-            background: #ff6a00;
-            border-radius: 3px;
-        }
+        .tv-scores-container::-webkit-scrollbar { width: 6px; }
+        .tv-scores-container::-webkit-scrollbar-track { background: #1a1a2e; }
+        .tv-scores-container::-webkit-scrollbar-thumb { background: #ff6a00; border-radius: 3px; }
 
         .tv-score-row {
             display: flex;
             align-items: center;
             padding: 12px 20px;
             border-bottom: 1px solid rgba(255, 106, 0, 0.15);
-            transition: background 0.2s;
-        }
-
-        .tv-score-row:hover {
-            background: rgba(255, 106, 0, 0.05);
         }
 
         .tv-rank {
@@ -613,11 +496,7 @@
             flex-shrink: 0;
         }
 
-        .tv-player-name {
-            font-size: 1.6em;
-            flex: 1;
-            font-weight: bold;
-        }
+        .tv-player-name { font-size: 1.6em; flex: 1; font-weight: bold; }
 
         .tv-score {
             font-size: 1.8em;
@@ -638,14 +517,12 @@
             vertical-align: middle;
         }
 
-        /* TICKER */
         .ticker {
             background: #ff6a00;
             padding: 10px 0;
             overflow: hidden;
             white-space: nowrap;
             flex-shrink: 0;
-            position: relative;
         }
 
         .ticker-content {
@@ -662,7 +539,6 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* MODAL */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -674,9 +550,7 @@
             justify-content: center;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal {
             background: #16213e;
@@ -696,9 +570,7 @@
             letter-spacing: 2px;
         }
 
-        .modal .form-group {
-            margin-bottom: 15px;
-        }
+        .modal .form-group { margin-bottom: 15px; }
 
         .modal .form-group label {
             display: block;
@@ -720,15 +592,9 @@
             font-size: 1em;
         }
 
-        .modal .form-group select option {
-            background: #0f3460;
-        }
+        .modal .form-group select option { background: #0f3460; }
 
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
 
         .modal-close {
             position: absolute;
@@ -740,23 +606,13 @@
             cursor: pointer;
         }
 
-        /* ADMIN MODE VISIBILITY */
-        .admin-only {
-            display: block;
-        }
-
-        .tv-mode-active .admin-only {
-            display: none;
-        }
-
-        /* RESPONSIVE */
         @media (max-width: 600px) {
             .header h1 { font-size: 1.5em; }
             .tv-header h1 { font-size: 2em; }
             .tv-player-name { font-size: 1.2em; }
             .tv-score { font-size: 1.4em; }
             .tv-rank { font-size: 1.4em; }
-            .main-content { padding: 10px; padding-bottom: 160px; }
+            .main-content { padding: 10px; padding-bottom: 180px; }
             .tv-scores-wrapper { padding: 10px 15px; }
         }
     </style>
@@ -770,7 +626,7 @@
         <h1>Breakdown Leaderboard</h1>
     </div>
 
-    <div class="stats-bar" id="statsBar">
+    <div class="stats-bar">
         <div class="stat-card">
             <div class="label">Total Drills</div>
             <div class="value" id="statTotalDrills">0</div>
@@ -796,7 +652,7 @@
     <div class="main-content" id="drillPanels"></div>
 </div>
 
-<!-- TV / PRESENTATION MODE -->
+<!-- TV MODE -->
 <div class="tv-mode" id="tvMode">
     <div class="tv-header">
         <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="Logo" class="logo">
@@ -804,14 +660,12 @@
         <div class="tv-drill-name" id="tvDrillName">—</div>
     </div>
 
-    <!-- DRILL NAVIGATION -->
     <div class="tv-drill-nav" id="tvDrillNav">
-        <button class="tv-nav-arrow" id="tvPrevBtn" onclick="tvNavigate(-1)">&#8592;</button>
+        <button class="tv-nav-arrow" onclick="tvNavigate(-1)">&#8592;</button>
         <div id="tvDrillNavBtns" style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;"></div>
-        <button class="tv-nav-arrow" id="tvNextBtn" onclick="tvNavigate(1)">&#8594;</button>
+        <button class="tv-nav-arrow" onclick="tvNavigate(1)">&#8594;</button>
     </div>
 
-    <!-- ROTATION CONTROLS -->
     <div class="tv-rotation-controls">
         <button class="auto-rotate-btn" id="autoRotateBtn" onclick="toggleAutoRotate()">▶ Auto Rotate</button>
         <label>Speed:</label>
@@ -836,7 +690,7 @@
     </div>
 </div>
 
-<!-- MODE TOGGLE BUTTONS -->
+<!-- MODE TOGGLE -->
 <div class="mode-toggle">
     <button class="mode-btn active" id="adminBtn" onclick="switchMode('admin')">⚙️ Admin</button>
     <button class="mode-btn" id="tvBtn" onclick="switchMode('tv')">📺 TV Mode</button>
@@ -888,20 +742,7 @@
 
 <script>
 // ============================================================
-// FIREBASE CONFIG — Replace with your own Firebase project details
-// ============================================================
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    databaseURL: "YOUR_DATABASE_URL",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
-
-// ============================================================
-// DATA STORE (local fallback if Firebase not configured)
+// DATA
 // ============================================================
 let drills = [
     { id: 'drill_1', name: '30sec Lane Touch', type: 'count' },
@@ -911,8 +752,6 @@ let drills = [
 ];
 
 let scores = {};
-drills.forEach(d => scores[d.id] = []);
-
 let activeDrillId = drills[0].id;
 let currentMode = 'admin';
 let tvDrillIndex = 0;
@@ -934,10 +773,9 @@ function loadFromLocalStorage() {
         const savedScores = localStorage.getItem('bb_scores');
         if (savedDrills) drills = JSON.parse(savedDrills);
         if (savedScores) scores = JSON.parse(savedScores);
-        // Ensure scores object has keys for all drills
         drills.forEach(d => { if (!scores[d.id]) scores[d.id] = []; });
     } catch(e) {
-        console.log('LocalStorage load error:', e);
+        console.warn('LocalStorage load error:', e);
     }
 }
 
@@ -946,7 +784,7 @@ function saveToLocalStorage() {
         localStorage.setItem('bb_drills', JSON.stringify(drills));
         localStorage.setItem('bb_scores', JSON.stringify(scores));
     } catch(e) {
-        console.log('LocalStorage save error:', e);
+        console.warn('LocalStorage save error:', e);
     }
 }
 
@@ -954,8 +792,9 @@ function renderAll() {
     renderTabs();
     renderPanels();
     renderStats();
-    renderTVMode();
     renderTVDrillNav();
+    renderTVMode();
+    updateTicker();
 }
 
 // ============================================================
@@ -968,10 +807,19 @@ function renderTabs() {
     drills.forEach(drill => {
         const tab = document.createElement('div');
         tab.className = 'tab' + (drill.id === activeDrillId ? ' active' : '');
-        tab.innerHTML = `
-            <span onclick="switchDrill('${drill.id}')">${drill.name}</span>
-            <button class="delete-drill" onclick="deleteDrill('${drill.id}')" title="Delete drill">✕</button>
-        `;
+
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = drill.name;
+        nameSpan.onclick = () => switchDrill(drill.id);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'delete-drill';
+        delBtn.textContent = '✕';
+        delBtn.title = 'Delete drill';
+        delBtn.onclick = (e) => { e.stopPropagation(); deleteDrill(drill.id); };
+
+        tab.appendChild(nameSpan);
+        tab.appendChild(delBtn);
         tabsEl.appendChild(tab);
     });
 
@@ -992,7 +840,7 @@ function switchDrill(drillId) {
 }
 
 // ============================================================
-// PANELS
+// PANELS — key fix: use data attributes instead of inline onclick strings
 // ============================================================
 function renderPanels() {
     const panelsEl = document.getElementById('drillPanels');
@@ -1005,33 +853,92 @@ function renderPanels() {
 
         const scoreLabel = drill.type === 'count' ? 'Count (reps)' : 'Time (seconds)';
         const scorePlaceholder = drill.type === 'count' ? 'e.g. 42' : 'e.g. 20.5';
+        const directionHint = drill.type === 'time' ? '— Lower is better ⬇️' : '— Higher is better ⬆️';
 
-        panel.innerHTML = `
-            <div class="add-score-form admin-only">
-                <h3>➕ Add Score — ${drill.name}</h3>
-                <div class="form-row">
-                    <input type="text" id="playerName_${drill.id}" placeholder="Player Name">
-                    <input type="number" id="scoreInput_${drill.id}" placeholder="${scorePlaceholder}" step="0.01">
-                    <button class="btn btn-primary" onclick="addScore('${drill.id}')">Add Score</button>
-                </div>
-                <div style="margin-top:8px; font-size:0.8em; color:#888;">
-                    📊 Score type: <strong style="color:#ff6a00;">${scoreLabel}</strong>
-                    ${drill.type === 'time' ? '— Lower is better ⬇️' : '— Higher is better ⬆️'}
-                </div>
-            </div>
+        // ---- Form ----
+        const formDiv = document.createElement('div');
+        formDiv.className = 'add-score-form';
 
-            <div class="drill-controls admin-only">
-                <button class="btn btn-danger" onclick="clearDrillScores('${drill.id}')">🗑️ Clear All Scores</button>
-            </div>
+        const formTitle = document.createElement('h3');
+        formTitle.textContent = `➕ Add Score — ${drill.name}`;
+        formDiv.appendChild(formTitle);
 
-            <div class="leaderboard-container">
-                <div class="leaderboard-header">
-                    <h3>🏆 ${drill.name} — Leaderboard</h3>
-                    <span style="font-size:0.85em;">${drill.type === 'count' ? '⬆️ Highest First' : '⬇️ Fastest First'}</span>
-                </div>
-                <div id="leaderboard_${drill.id}"></div>
-            </div>
+        const formRow = document.createElement('div');
+        formRow.className = 'form-row';
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.id = 'playerName_' + drill.id;
+        nameInput.placeholder = 'Player Name';
+
+        const scoreInput = document.createElement('input');
+        scoreInput.type = 'number';
+        scoreInput.id = 'scoreInput_' + drill.id;
+        scoreInput.placeholder = scorePlaceholder;
+        scoreInput.step = '0.01';
+        scoreInput.min = '0';
+
+        const addBtn = document.createElement('button');
+        addBtn.className = 'btn btn-primary';
+        addBtn.textContent = 'Add Score';
+        addBtn.setAttribute('data-drill-id', drill.id);
+        addBtn.addEventListener('click', function() {
+            addScore(this.getAttribute('data-drill-id'));
+        });
+
+        // Allow Enter key on inputs to submit
+        nameInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') addScore(drill.id);
+        });
+        scoreInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') addScore(drill.id);
+        });
+
+        formRow.appendChild(nameInput);
+        formRow.appendChild(scoreInput);
+        formRow.appendChild(addBtn);
+        formDiv.appendChild(formRow);
+
+        const hint = document.createElement('div');
+        hint.style.cssText = 'margin-top:8px; font-size:0.8em; color:#888;';
+        hint.innerHTML = `📊 Score type: <strong style="color:#ff6a00;">${scoreLabel}</strong> ${directionHint}`;
+        formDiv.appendChild(hint);
+
+        panel.appendChild(formDiv);
+
+        // ---- Controls ----
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'drill-controls';
+
+        const clearBtn = document.createElement('button');
+        clearBtn.className = 'btn btn-danger';
+        clearBtn.textContent = '🗑️ Clear All Scores';
+        clearBtn.setAttribute('data-drill-id', drill.id);
+        clearBtn.addEventListener('click', function() {
+            clearDrillScores(this.getAttribute('data-drill-id'));
+        });
+
+        controlsDiv.appendChild(clearBtn);
+        panel.appendChild(controlsDiv);
+
+        // ---- Leaderboard ----
+        const lbContainer = document.createElement('div');
+        lbContainer.className = 'leaderboard-container';
+
+        const lbHeader = document.createElement('div');
+        lbHeader.className = 'leaderboard-header';
+        lbHeader.innerHTML = `
+            <h3>🏆 ${drill.name} — Leaderboard</h3>
+            <span style="font-size:0.85em;">${drill.type === 'count' ? '⬆️ Highest First' : '⬇️ Fastest First'}</span>
         `;
+
+        const lbBody = document.createElement('div');
+        lbBody.id = 'leaderboard_' + drill.id;
+
+        lbContainer.appendChild(lbHeader);
+        lbContainer.appendChild(lbBody);
+        panel.appendChild(lbContainer);
+
         panelsEl.appendChild(panel);
         renderLeaderboard(drill.id);
     });
@@ -1070,62 +977,105 @@ function renderLeaderboard(drillId) {
 
     const scoreColLabel = drill.type === 'count' ? 'Count' : 'Time';
 
-    let html = `
-        <table class="leaderboard-table">
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Player</th>
-                    <th>${scoreColLabel}</th>
-                    <th>Date</th>
-                    <th class="admin-only">Actions</th>
-                </tr>
-            </thead>
-            <tbody>`;
+    const table = document.createElement('table');
+    table.className = 'leaderboard-table';
+
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>${scoreColLabel}</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>`;
+
+    const tbody = document.createElement('tbody');
 
     sorted.forEach((entry, index) => {
         const rank = index + 1;
-        let rankClass = rank <= 3 ? `rank-${rank}` : 'rank-other';
-        let rankDisplay = rank <= 3 ? ['🥇','🥈','🥉'][rank-1] : rank;
+        const rankClass = rank <= 3 ? `rank-${rank}` : 'rank-other';
+        const rankDisplay = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
         const scoreClass = drill.type === 'count' ? 'score-count' : 'score-time';
         const scoreDisplay = drill.type === 'time' ? entry.score + 's' : entry.score;
         const pbBadge = entry.isPB ? '<span class="pb-badge">NEW PB! 🔥</span>' : '';
         const dateStr = entry.timestamp ? new Date(entry.timestamp).toLocaleDateString() : '—';
         const timeStr = entry.timestamp ? new Date(entry.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '';
 
-        html += `
-            <tr>
-                <td><span class="rank-badge ${rankClass}">${rankDisplay}</span></td>
-                <td>${entry.name}${pbBadge}</td>
-                <td><span class="${scoreClass}">${scoreDisplay}</span></td>
-                <td><span class="timestamp">${dateStr}<br>${timeStr}</span></td>
-                <td class="admin-only">
-                    <button class="action-btn edit-btn" onclick="openEditModal('${drillId}', '${entry.id}')">✏️</button>
-                    <button class="action-btn delete-btn" onclick="deleteScore('${drillId}', '${entry.id}')">🗑️</button>
-                </td>
-            </tr>`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><span class="rank-badge ${rankClass}">${rankDisplay}</span></td>
+            <td>${entry.name}${pbBadge}</td>
+            <td><span class="${scoreClass}">${scoreDisplay}</span></td>
+            <td><span class="timestamp">${dateStr}<br>${timeStr}</span></td>
+            <td></td>`;
+
+        // Edit button
+        const editBtn = document.createElement('button');
+        editBtn.className = 'action-btn edit-btn';
+        editBtn.textContent = '✏️';
+        editBtn.addEventListener('click', () => openEditModal(drillId, entry.id));
+
+        // Delete button
+        const delBtn = document.createElement('button');
+        delBtn.className = 'action-btn delete-btn';
+        delBtn.textContent = '🗑️';
+        delBtn.addEventListener('click', () => deleteScore(drillId, entry.id));
+
+        const actionTd = tr.querySelector('td:last-child');
+        actionTd.appendChild(editBtn);
+        actionTd.appendChild(delBtn);
+
+        tbody.appendChild(tr);
     });
 
-    html += '</tbody></table>';
-    container.innerHTML = html;
+    table.appendChild(tbody);
+    container.innerHTML = '';
+    container.appendChild(table);
 }
 
 // ============================================================
-// ADD SCORE
+// ADD SCORE — fully rebuilt with clear validation
 // ============================================================
 function addScore(drillId) {
     const drill = drills.find(d => d.id === drillId);
+    if (!drill) {
+        console.error('Drill not found:', drillId);
+        return;
+    }
+
     const nameEl = document.getElementById('playerName_' + drillId);
     const scoreEl = document.getElementById('scoreInput_' + drillId);
 
+    if (!nameEl || !scoreEl) {
+        console.error('Input elements not found for drill:', drillId);
+        return;
+    }
+
     const name = nameEl.value.trim();
-    const score = parseFloat(scoreEl.value);
+    const rawScore = scoreEl.value.trim();
+    const score = parseFloat(rawScore);
 
-    if (!name) { alert('Please enter a player name.'); return; }
-    if (isNaN(score) || score < 0) { alert('Please enter a valid score.'); return; }
+    if (!name) {
+        alert('⚠️ Please enter a player name.');
+        nameEl.focus();
+        return;
+    }
 
-    // Check for personal best
-    const existing = scores[drillId].filter(e => e.name.toLowerCase() === name.toLowerCase());
+    if (rawScore === '' || isNaN(score) || score < 0) {
+        alert('⚠️ Please enter a valid score (must be a positive number).');
+        scoreEl.focus();
+        return;
+    }
+
+    if (!scores[drillId]) scores[drillId] = [];
+
+    // Personal best check
+    const existing = scores[drillId].filter(
+        e => e.name.toLowerCase() === name.toLowerCase()
+    );
+
     let isPB = false;
     if (existing.length === 0) {
         isPB = true;
@@ -1133,11 +1083,13 @@ function addScore(drillId) {
         const bestExisting = drill.type === 'count'
             ? Math.max(...existing.map(e => e.score))
             : Math.min(...existing.map(e => e.score));
-        isPB = drill.type === 'count' ? score > bestExisting : score < bestExisting;
+        isPB = drill.type === 'count'
+            ? score > bestExisting
+            : score < bestExisting;
     }
 
     const entry = {
-        id: 'entry_' + Date.now(),
+        id: 'entry_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
         name,
         score,
         isPB,
@@ -1146,13 +1098,17 @@ function addScore(drillId) {
 
     scores[drillId].push(entry);
     saveToLocalStorage();
+
+    // Re-render
     renderLeaderboard(drillId);
     renderStats();
     renderTVMode();
     updateTicker();
 
+    // Clear inputs
     nameEl.value = '';
     scoreEl.value = '';
+    nameEl.focus();
 }
 
 // ============================================================
@@ -1165,19 +1121,22 @@ function deleteScore(drillId, entryId) {
     renderLeaderboard(drillId);
     renderStats();
     renderTVMode();
+    updateTicker();
 }
 
 // ============================================================
-// CLEAR DRILL SCORES
+// CLEAR ALL SCORES
 // ============================================================
 function clearDrillScores(drillId) {
     const drill = drills.find(d => d.id === drillId);
+    if (!drill) return;
     if (!confirm(`Clear ALL scores for "${drill.name}"?`)) return;
     scores[drillId] = [];
     saveToLocalStorage();
     renderLeaderboard(drillId);
     renderStats();
     renderTVMode();
+    updateTicker();
 }
 
 // ============================================================
@@ -1185,12 +1144,14 @@ function clearDrillScores(drillId) {
 // ============================================================
 function deleteDrill(drillId) {
     const drill = drills.find(d => d.id === drillId);
+    if (!drill) return;
     if (!confirm(`Delete drill "${drill.name}" and all its scores?`)) return;
     drills = drills.filter(d => d.id !== drillId);
     delete scores[drillId];
     if (activeDrillId === drillId) {
         activeDrillId = drills.length > 0 ? drills[0].id : null;
     }
+    if (tvDrillIndex >= drills.length) tvDrillIndex = 0;
     saveToLocalStorage();
     renderAll();
 }
@@ -1200,7 +1161,7 @@ function deleteDrill(drillId) {
 // ============================================================
 function openEditModal(drillId, entryId) {
     const drill = drills.find(d => d.id === drillId);
-    const entry = scores[drillId].find(e => e.id === entryId);
+    const entry = (scores[drillId] || []).find(e => e.id === entryId);
     if (!drill || !entry) return;
 
     editingEntry = { drillId, entryId };
@@ -1215,8 +1176,8 @@ function saveEditedScore() {
     if (!editingEntry) return;
     const { drillId, entryId } = editingEntry;
     const drill = drills.find(d => d.id === drillId);
-    const entryIndex = scores[drillId].findIndex(e => e.id === entryId);
-    if (entryIndex === -1) return;
+    const entryIndex = (scores[drillId] || []).findIndex(e => e.id === entryId);
+    if (!drill || entryIndex === -1) return;
 
     const newName = document.getElementById('editPlayerName').value.trim();
     const newScore = parseFloat(document.getElementById('editScoreValue').value);
@@ -1224,7 +1185,6 @@ function saveEditedScore() {
     if (!newName) { alert('Please enter a player name.'); return; }
     if (isNaN(newScore) || newScore < 0) { alert('Please enter a valid score.'); return; }
 
-    // Recalculate PB
     const others = scores[drillId].filter((e, i) => i !== entryIndex && e.name.toLowerCase() === newName.toLowerCase());
     let isPB = false;
     if (others.length === 0) {
@@ -1248,6 +1208,7 @@ function saveEditedScore() {
     renderLeaderboard(drillId);
     renderStats();
     renderTVMode();
+    updateTicker();
     closeModal('editScoreModal');
     editingEntry = null;
 }
@@ -1293,7 +1254,6 @@ function renderStats() {
     drills.forEach(d => { totalEntries += (scores[d.id] || []).length; });
     document.getElementById('statTotalEntries').textContent = totalEntries;
 
-    // Current leader from active drill
     if (activeDrillId && scores[activeDrillId] && scores[activeDrillId].length > 0) {
         const sorted = getSortedScores(activeDrillId);
         const drill = drills.find(d => d.id === activeDrillId);
@@ -1310,11 +1270,14 @@ function renderStats() {
 // TV MODE
 // ============================================================
 function renderTVMode() {
-    if (drills.length === 0) return;
+    if (drills.length === 0) {
+        document.getElementById('tvDrillName').textContent = 'No Drills';
+        document.getElementById('tvScoresContainer').innerHTML = '';
+        return;
+    }
     if (tvDrillIndex >= drills.length) tvDrillIndex = 0;
     const drill = drills[tvDrillIndex];
     renderTVDrill(drill);
-    updateTicker();
 }
 
 function renderTVDrill(drill) {
@@ -1330,13 +1293,14 @@ function renderTVDrill(drill) {
             <div style="text-align:center; padding:60px; color:#888; font-size:1.5em;">
                 No scores yet for this drill
             </div>`;
+        renderTVDrillNav();
         return;
     }
 
     let html = '';
     sorted.forEach((entry, index) => {
         const rank = index + 1;
-        let rankDisplay = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+        const rankDisplay = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
         const scoreDisplay = drill.type === 'time' ? entry.score + 's' : entry.score;
         const pbBadge = entry.isPB ? '<span class="tv-pb">🔥 PB</span>' : '';
 
@@ -1349,8 +1313,6 @@ function renderTVDrill(drill) {
     });
 
     container.innerHTML = html;
-
-    // Update nav buttons active state
     renderTVDrillNav();
 }
 
@@ -1362,15 +1324,16 @@ function renderTVDrillNav() {
         const btn = document.createElement('button');
         btn.className = 'tv-drill-nav-btn' + (index === tvDrillIndex ? ' active' : '');
         btn.textContent = drill.name;
-        btn.onclick = () => {
+        btn.addEventListener('click', () => {
             tvDrillIndex = index;
             renderTVMode();
-        };
+        });
         navBtns.appendChild(btn);
     });
 }
 
 function tvNavigate(direction) {
+    if (drills.length === 0) return;
     tvDrillIndex = (tvDrillIndex + direction + drills.length) % drills.length;
     renderTVMode();
 }
@@ -1394,6 +1357,7 @@ function toggleAutoRotate() {
 
 function startAutoRotate() {
     stopAutoRotate();
+    if (drills.length === 0) return;
     const speed = parseInt(document.getElementById('rotateSpeed').value);
     autoRotateInterval = setInterval(() => {
         tvDrillIndex = (tvDrillIndex + 1) % drills.length;
@@ -1409,9 +1373,7 @@ function stopAutoRotate() {
 }
 
 function updateRotateSpeed() {
-    if (isAutoRotating) {
-        startAutoRotate();
-    }
+    if (isAutoRotating) startAutoRotate();
 }
 
 // ============================================================
@@ -1455,7 +1417,7 @@ function switchMode(mode) {
 }
 
 // ============================================================
-// MODAL HELPERS
+// MODALS
 // ============================================================
 function openModal(id) {
     document.getElementById(id).classList.add('active');
@@ -1465,7 +1427,6 @@ function closeModal(id) {
     document.getElementById(id).classList.remove('active');
 }
 
-// Close modal on overlay click
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', function(e) {
         if (e.target === this) closeModal(this.id);
