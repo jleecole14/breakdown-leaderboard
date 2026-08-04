@@ -5,941 +5,1477 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Breakdown Leaderboard</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0a0a0a;
+            background: #1a1a2e;
             color: #ffffff;
             min-height: 100vh;
         }
 
-        /* ── HEADER ── */
+        /* HEADER */
         .header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 20px;
             text-align: center;
             border-bottom: 3px solid #ff6a00;
+            position: relative;
         }
-        .header img { height: 80px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
-        .header h1 { font-size: 2em; color: #ff6a00; letter-spacing: 3px; text-transform: uppercase; }
 
-        /* ── TABS ── */
-        .tabs-container {
-            background: #1a1a1a;
-            padding: 15px 20px 0;
-            border-bottom: 2px solid #333;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
+        .header img.logo {
+            width: 120px;
+            margin-bottom: 10px;
         }
-        .tab-btn {
-            background: #2d2d2d;
-            color: #aaa;
-            border: 1px solid #444;
-            padding: 8px 16px;
-            border-radius: 6px 6px 0 0;
+
+        .header h1 {
+            font-size: 2.2em;
+            color: #ff6a00;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 106, 0, 0.5);
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px 20px;
+            background: #16213e;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: #0f3460;
+            border: 1px solid #ff6a00;
+            border-radius: 8px;
+            padding: 10px 20px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-card .label {
+            font-size: 0.7em;
+            color: #ff6a00;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        /* TABS */
+        .tabs-container {
+            padding: 15px 20px 0;
+            background: #1a1a2e;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #ff6a00;
+            padding-bottom: 0;
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 16px;
+            background: #0f3460;
+            border: 1px solid #ff6a00;
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
             cursor: pointer;
+            color: #ccc;
             font-size: 0.85em;
             transition: all 0.2s;
+        }
+
+        .tab:hover {
+            background: #ff6a00;
+            color: #fff;
+        }
+
+        .tab.active {
+            background: #ff6a00;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .tab .delete-drill {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.75em;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            transition: background 0.2s;
         }
-        .tab-btn:hover { background: #3d3d3d; color: #fff; }
-        .tab-btn.active { background: #ff6a00; color: #fff; border-color: #ff6a00; }
-        .tab-delete {
-            background: none; border: none; color: #ff4444;
-            cursor: pointer; font-size: 0.9em; padding: 0 2px; line-height: 1;
-        }
-        .add-drill-tab {
-            background: #1a3a1a; color: #4CAF50;
-            border: 1px dashed #4CAF50; padding: 8px 16px;
-            border-radius: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.2s;
-        }
-        .add-drill-tab:hover { background: #2a4a2a; }
 
-        /* ── MAIN ── */
+        .tab .delete-drill:hover {
+            background: rgba(255,0,0,0.6);
+        }
+
+        .add-drill-tab {
+            padding: 10px 16px;
+            background: transparent;
+            border: 1px dashed #ff6a00;
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            color: #ff6a00;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+
+        .add-drill-tab:hover {
+            background: rgba(255, 106, 0, 0.2);
+        }
+
+        /* MAIN CONTENT */
         .main-content {
             padding: 20px;
             max-width: 900px;
             margin: 0 auto;
-            padding-bottom: 130px;
+            padding-bottom: 160px;
         }
 
-        /* ── STATS BAR ── */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
+        /* DRILL PANEL */
+        .drill-panel {
+            display: none;
+        }
+
+        .drill-panel.active {
+            display: block;
+        }
+
+        /* ADD SCORE FORM */
+        .add-score-form {
+            background: #16213e;
+            border: 1px solid #ff6a00;
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 20px;
         }
-        .stat-card {
-            background: #1a1a1a; border: 1px solid #333;
-            border-radius: 8px; padding: 12px; text-align: center;
-        }
-        .stat-card .label { font-size: 0.7em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-card .value { font-size: 1.3em; font-weight: bold; color: #ff6a00; margin-top: 4px; }
 
-        /* ── FORM ── */
-        .form-section {
-            background: #1a1a1a; border: 1px solid #333;
-            border-radius: 10px; padding: 20px; margin-bottom: 20px;
+        .add-score-form h3 {
+            color: #ff6a00;
+            margin-bottom: 15px;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .form-section h3 { color: #ff6a00; margin-bottom: 15px; font-size: 1em; text-transform: uppercase; letter-spacing: 1px; }
-        .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
-        .form-row input, .form-row select {
-            flex: 1; min-width: 150px;
-            background: #2d2d2d; border: 1px solid #444;
-            color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 0.95em;
-        }
-        .form-row input:focus, .form-row select:focus { outline: none; border-color: #ff6a00; }
-        .score-hint { margin-top: 8px; font-size: 0.8em; color: #666; }
 
-        /* ── BUTTONS ── */
+        .form-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .form-row input {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px 15px;
+            background: #0f3460;
+            border: 1px solid #ff6a00;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1em;
+        }
+
+        .form-row input::placeholder {
+            color: #888;
+        }
+
+        .form-row input:focus {
+            outline: none;
+            border-color: #ff9a40;
+            box-shadow: 0 0 8px rgba(255, 106, 0, 0.4);
+        }
+
         .btn {
-            padding: 10px 20px; border: none; border-radius: 6px;
-            cursor: pointer; font-size: 0.9em; font-weight: bold;
-            transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .btn-orange { background: #ff6a00; color: #fff; }
-        .btn-orange:hover { background: #e55a00; }
-        .btn-red { background: #c0392b; color: #fff; }
-        .btn-red:hover { background: #a93226; }
-        .btn-green { background: #27ae60; color: #fff; }
-        .btn-green:hover { background: #229954; }
 
-        /* ── LEADERBOARD ── */
-        .leaderboard { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; overflow: hidden; }
+        .btn-primary {
+            background: #ff6a00;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #ff9a40;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: #c0392b;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #e74c3c;
+        }
+
+        .btn-secondary {
+            background: #0f3460;
+            color: #fff;
+            border: 1px solid #ff6a00;
+        }
+
+        .btn-secondary:hover {
+            background: #1a4a8a;
+        }
+
+        /* LEADERBOARD TABLE */
+        .leaderboard-container {
+            background: #16213e;
+            border: 1px solid #ff6a00;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
         .leaderboard-header {
-            background: #ff6a00; padding: 12px 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            background: #ff6a00;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .leaderboard-header h3 { font-size: 1em; text-transform: uppercase; letter-spacing: 2px; }
-        table { width: 100%; border-collapse: collapse; }
-        thead th {
-            background: #2d2d2d; padding: 10px 16px; text-align: left;
-            font-size: 0.8em; color: #888; text-transform: uppercase; letter-spacing: 1px;
+
+        .leaderboard-header h3 {
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
-        tbody tr { border-bottom: 1px solid #222; transition: background 0.2s; }
-        tbody tr:hover { background: #222; }
-        tbody td { padding: 12px 16px; font-size: 0.95em; }
-        .rank-1 { color: #FFD700; font-weight: bold; }
-        .rank-2 { color: #C0C0C0; font-weight: bold; }
-        .rank-3 { color: #CD7F32; font-weight: bold; }
-        .score-time { color: #4fc3f7; font-weight: bold; }
-        .score-count { color: #81c784; font-weight: bold; }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th {
+            background: #0f3460;
+            padding: 10px 15px;
+            text-align: left;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ff6a00;
+        }
+
+        .leaderboard-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 106, 0, 0.1);
+            font-size: 0.95em;
+        }
+
+        .leaderboard-table tr:hover {
+            background: rgba(255, 106, 0, 0.05);
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+
+        .rank-1 { background: #FFD700; color: #000; }
+        .rank-2 { background: #C0C0C0; color: #000; }
+        .rank-3 { background: #CD7F32; color: #fff; }
+        .rank-other { background: #0f3460; color: #fff; }
+
+        .score-time { color: #4ecdc4; font-weight: bold; }
+        .score-count { color: #2ecc71; font-weight: bold; }
+
         .pb-badge {
-            background: #ff6a00; color: white; font-size: 0.65em;
-            padding: 2px 6px; border-radius: 10px; margin-left: 6px; white-space: nowrap;
+            background: linear-gradient(135deg, #ff6a00, #ff9a40);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin-left: 8px;
+            animation: pulse 1.5s infinite;
         }
-        .delete-entry-btn {
-            background: none; border: none; color: #555; cursor: pointer;
-            font-size: 0.9em; padding: 4px 8px; border-radius: 4px; transition: all 0.2s;
-        }
-        .delete-entry-btn:hover { color: #ff4444; background: #2d2d2d; }
-        .edit-entry-btn {
-            background: none; border: none; color: #555; cursor: pointer;
-            font-size: 0.9em; padding: 4px 8px; border-radius: 4px; transition: all 0.2s;
-        }
-        .edit-entry-btn:hover { color: #ff6a00; background: #2d2d2d; }
-        .timestamp { font-size: 0.75em; color: #555; }
-        .empty-state { text-align: center; padding: 40px; color: #555; }
-        .empty-state .icon { font-size: 2em; margin-bottom: 10px; }
 
-        /* ── MODALS ── */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.85);
-            z-index: 9999; justify-content: center; align-items: center;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
-        .modal-overlay.active { display: flex; }
-        .modal {
-            background: #1a1a1a; border: 2px solid #ff6a00;
-            border-radius: 12px; padding: 30px; width: 90%; max-width: 420px;
-        }
-        .modal h2 { color: #ff6a00; margin-bottom: 20px; font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; }
-        .modal label { display: block; color: #aaa; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-        .modal input, .modal select {
-            width: 100%; background: #2d2d2d; border: 1px solid #444;
-            color: #fff; padding: 12px 14px; border-radius: 6px;
-            font-size: 1em; margin-bottom: 15px; display: block;
-        }
-        .modal input:focus, .modal select:focus { outline: none; border-color: #ff6a00; }
-        .modal-buttons { display: flex; gap: 10px; margin-top: 10px; }
-        .modal-buttons button {
-            flex: 1; padding: 12px; border: none; border-radius: 6px;
-            cursor: pointer; font-size: 1em; font-weight: bold; text-transform: uppercase;
-        }
-        .modal-confirm { background: #ff6a00; color: white; }
-        .modal-confirm:hover { background: #e55a00; }
-        .modal-confirm:disabled { background: #444; color: #666; cursor: not-allowed; }
-        .modal-cancel { background: #333; color: #aaa; }
-        .modal-cancel:hover { background: #444; color: #fff; }
 
-        /* ── MODE TOGGLE ── */
-    .mode-toggle {
-    position: fixed;
-    bottom: 80px;  /* pushes it up above the ticker bar */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    display: flex;
-    gap: 10px;
-}
+        .timestamp {
+            font-size: 0.75em;
+            color: #888;
         }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            transition: background 0.2s;
+        }
+
+        .edit-btn { color: #4ecdc4; }
+        .edit-btn:hover { background: rgba(78, 205, 196, 0.2); }
+        .delete-btn { color: #e74c3c; }
+        .delete-btn:hover { background: rgba(231, 76, 60, 0.2); }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .empty-state .icon { font-size: 3em; margin-bottom: 10px; }
+
+        /* DRILL CONTROLS */
+        .drill-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* MODE TOGGLE */
+        .mode-toggle {
+            position: fixed;
+            bottom: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
         .mode-btn {
-            padding: 8px 18px; border: none; border-radius: 20px;
-            cursor: pointer; font-size: 0.85em; font-weight: bold;
-            transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
+            padding: 12px 24px;
+            border: 2px solid #ff6a00;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
         }
-        .mode-btn.active { background: #ff6a00; color: #fff; }
-        .mode-btn:not(.active) { background: #2d2d2d; color: #aaa; }
-        .mode-btn:not(.active):hover { background: #3d3d3d; color: #fff; }
 
-        /* ── TV MODE ── */
-        .tv-mode {
-            display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: #000;
-            z-index: 500; flex-direction: column; overflow: hidden;
+        .mode-btn.active {
+            background: #ff6a00;
+            color: #fff;
         }
-        .tv-mode.active { display: flex; }
+
+        .mode-btn:not(.active) {
+            background: rgba(26, 26, 46, 0.95);
+            color: #ff6a00;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 106, 0, 0.4);
+        }
+
+        /* TV / PRESENTATION MODE */
+        .tv-mode {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #0a0a1a;
+            z-index: 500;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tv-mode.active {
+            display: flex;
+        }
 
         .tv-header {
-            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-            padding: 18px 40px;
-            display: flex; align-items: center; justify-content: center;
-            border-bottom: 4px solid #ff6a00; gap: 20px; flex-shrink: 0;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 20px 40px;
+            text-align: center;
+            border-bottom: 4px solid #ff6a00;
+            flex-shrink: 0;
         }
-        .tv-header img { height: 65px; }
-        .tv-header h1 { font-size: 2.4em; color: #ff6a00; letter-spacing: 4px; text-transform: uppercase; }
+
+        .tv-header img.logo {
+            width: 100px;
+            margin-bottom: 8px;
+        }
+
+        .tv-header h1 {
+            font-size: 3em;
+            color: #ff6a00;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 30px rgba(255, 106, 0, 0.7);
+        }
 
         .tv-drill-name {
-            text-align: center; font-size: 1.8em; color: #ffffff;
-            background: #ff6a00; padding: 12px 40px;
-            letter-spacing: 3px; text-transform: uppercase; flex-shrink: 0;
+            font-size: 1.8em;
+            color: #ffffff;
+            margin-top: 8px;
+            letter-spacing: 3px;
+        }
+
+        /* TV DRILL NAV */
+        .tv-drill-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            background: #16213e;
+            border-bottom: 2px solid rgba(255,106,0,0.3);
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .tv-drill-nav-btn {
+            padding: 8px 18px;
+            background: #0f3460;
+            border: 2px solid #ff6a00;
+            border-radius: 20px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tv-drill-nav-btn:hover {
+            background: #ff6a00;
+            transform: translateY(-1px);
+        }
+
+        .tv-drill-nav-btn.active {
+            background: #ff6a00;
+            color: #fff;
+        }
+
+        .tv-nav-arrow {
+            background: none;
+            border: 2px solid #ff6a00;
+            color: #ff6a00;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .tv-nav-arrow:hover {
+            background: #ff6a00;
+            color: #fff;
+        }
+
+        /* TV ROTATION CONTROLS */
+        .tv-rotation-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 8px 20px;
+            background: #0f3460;
+            border-bottom: 1px solid rgba(255,106,0,0.2);
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .tv-rotation-controls label {
+            color: #ff6a00;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tv-rotation-controls select {
+            background: #1a1a2e;
+            border: 1px solid #ff6a00;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.85em;
+        }
+
+        .auto-rotate-btn {
+            padding: 6px 16px;
+            border: 2px solid #ff6a00;
+            border-radius: 15px;
+            background: transparent;
+            color: #ff6a00;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .auto-rotate-btn.active {
+            background: #ff6a00;
+            color: #fff;
+        }
+
+        .auto-rotate-btn:hover {
+            background: #ff6a00;
+            color: #fff;
+        }
+
+        .drill-indicator {
+            color: #888;
+            font-size: 0.8em;
+        }
+
+        /* TV SCORES */
+        .tv-scores-wrapper {
+            flex: 1;
+            overflow: hidden;
+            padding: 10px 40px;
+            display: flex;
+            flex-direction: column;
         }
 
         .tv-scores-container {
-            flex: 1; overflow-y: auto; padding: 10px 40px;
-            scrollbar-width: thin; scrollbar-color: #ff6a00 #1a1a1a;
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #ff6a00 #1a1a2e;
         }
-        .tv-scores-container::-webkit-scrollbar { width: 8px; }
-        .tv-scores-container::-webkit-scrollbar-track { background: #1a1a1a; }
-        .tv-scores-container::-webkit-scrollbar-thumb { background: #ff6a00; border-radius: 4px; }
 
-        .tv-scores-table { width: 100%; border-collapse: collapse; }
-        .tv-scores-table thead th {
-            background: #1a1a1a; color: #ff6a00; font-size: 1.1em;
-            padding: 14px 20px; text-transform: uppercase; letter-spacing: 2px;
-            position: sticky; top: 0; z-index: 10;
+        .tv-scores-container::-webkit-scrollbar {
+            width: 6px;
         }
-        .tv-scores-table tbody tr { border-bottom: 1px solid #1a1a1a; }
-        .tv-scores-table tbody tr:nth-child(even) { background: #0d0d0d; }
-        .tv-scores-table tbody tr:nth-child(odd) { background: #111; }
-        .tv-scores-table tbody td { padding: 14px 20px; }
 
-        @keyframes fadeInRow {
-            from { opacity: 0; transform: translateX(-12px); }
-            to { opacity: 1; transform: translateX(0); }
+        .tv-scores-container::-webkit-scrollbar-track {
+            background: #1a1a2e;
         }
-        .tv-scores-table tbody tr { animation: fadeInRow 0.4s ease; }
 
-        .tv-rank { font-size: 1.5em; font-weight: bold; width: 80px; }
-        .tv-rank-1 { color: #FFD700; }
-        .tv-rank-2 { color: #C0C0C0; }
-        .tv-rank-3 { color: #CD7F32; }
-        .tv-name { font-size: 1.4em; font-weight: bold; color: #fff; }
-        .tv-score { font-size: 1.6em; font-weight: bold; color: #ff6a00; }
-        .tv-score-count { color: #81c784; }
-        .tv-pb { font-size: 0.6em; background: #ff6a00; color: #fff; padding: 2px 6px; border-radius: 8px; margin-left: 8px; vertical-align: middle; }
+        .tv-scores-container::-webkit-scrollbar-thumb {
+            background: #ff6a00;
+            border-radius: 3px;
+        }
 
-        /* ── TV ROTATION BAR ── */
-        .tv-rotation-bar {
-            background: #1a1a1a; border-top: 2px solid #333;
-            padding: 10px 20px; display: flex; align-items: center;
-            justify-content: center; gap: 16px; flex-shrink: 0;
+        .tv-score-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(255, 106, 0, 0.15);
+            transition: background 0.2s;
         }
-        .tv-rotation-bar label {
-            color: #aaa; font-size: 0.85em;
-            display: flex; align-items: center; gap: 8px; cursor: pointer;
-        }
-        .tv-rotation-bar input[type="checkbox"] { accent-color: #ff6a00; width: 16px; height: 16px; }
-        .tv-rotation-bar select {
-            background: #2d2d2d; border: 1px solid #444; color: #fff;
-            padding: 6px 10px; border-radius: 6px; font-size: 0.85em;
-        }
-        .tv-drill-indicator { color: #ff6a00; font-size: 0.85em; font-weight: bold; }
 
-        /* ── TICKER ── */
-        .tv-ticker {
-            background: #ff6a00; color: #fff; padding: 10px 0;
-            overflow: hidden; white-space: nowrap; flex-shrink: 0;
+        .tv-score-row:hover {
+            background: rgba(255, 106, 0, 0.05);
         }
-        .tv-ticker-inner {
+
+        .tv-rank {
+            font-size: 1.8em;
+            font-weight: bold;
+            width: 70px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .tv-player-name {
+            font-size: 1.6em;
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .tv-score {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #ff6a00;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .tv-pb {
+            font-size: 0.6em;
+            background: linear-gradient(135deg, #ff6a00, #ff9a40);
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-left: 10px;
+            animation: pulse 1.5s infinite;
+            vertical-align: middle;
+        }
+
+        /* TICKER */
+        .ticker {
+            background: #ff6a00;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .ticker-content {
             display: inline-block;
-            animation: ticker 35s linear infinite;
-            font-size: 1em; font-weight: bold; letter-spacing: 2px;
+            animation: ticker-scroll 30s linear infinite;
+            font-size: 1.1em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            padding-left: 100%;
         }
-        @keyframes ticker {
-            0% { transform: translateX(100vw); }
+
+        @keyframes ticker-scroll {
+            0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
         }
 
-        /* ── FIREBASE STATUS ── */
-        .sync-status {
-            position: fixed; top: 10px; right: 14px;
-            font-size: 0.75em; color: #555; z-index: 2000;
-            display: flex; align-items: center; gap: 6px;
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
         }
-        .sync-dot {
-            width: 8px; height: 8px; border-radius: 50%; background: #555;
+
+        .modal-overlay.active {
+            display: flex;
         }
-        .sync-dot.connected { background: #27ae60; }
-        .sync-dot.syncing { background: #ff6a00; }
-        .sync-dot.error { background: #c0392b; }
+
+        .modal {
+            background: #16213e;
+            border: 2px solid #ff6a00;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+        }
+
+        .modal h2 {
+            color: #ff6a00;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .modal .form-group {
+            margin-bottom: 15px;
+        }
+
+        .modal .form-group label {
+            display: block;
+            color: #ff6a00;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .modal .form-group input,
+        .modal .form-group select {
+            width: 100%;
+            padding: 10px 15px;
+            background: #0f3460;
+            border: 1px solid #ff6a00;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1em;
+        }
+
+        .modal .form-group select option {
+            background: #0f3460;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: none;
+            border: none;
+            color: #ff6a00;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        /* ADMIN MODE VISIBILITY */
+        .admin-only {
+            display: block;
+        }
+
+        .tv-mode-active .admin-only {
+            display: none;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.5em; }
+            .tv-header h1 { font-size: 2em; }
+            .tv-player-name { font-size: 1.2em; }
+            .tv-score { font-size: 1.4em; }
+            .tv-rank { font-size: 1.4em; }
+            .main-content { padding: 10px; padding-bottom: 160px; }
+            .tv-scores-wrapper { padding: 10px 15px; }
+        }
     </style>
 </head>
 <body>
 
-<!-- SYNC STATUS -->
-<div class="sync-status">
-    <div class="sync-dot" id="syncDot"></div>
-    <span id="syncLabel">Local</span>
-</div>
-
-<!-- ════════════════════════════════════════════
-     ADMIN MODE
-════════════════════════════════════════════ -->
+<!-- ADMIN MODE -->
 <div id="adminMode">
     <div class="header">
-        <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="BBTF Logo">
-        <h1>BREAKDOWN LEADERBOARD</h1>
+        <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="Logo" class="logo">
+        <h1>Breakdown Leaderboard</h1>
     </div>
 
-    <div class="tabs-container" id="tabsContainer"></div>
-
-    <div class="main-content">
-        <div class="stats-bar" id="statsBar"></div>
-
-        <div class="form-section">
-            <h3>➕ Add Score</h3>
-            <div class="form-row">
-                <input type="text" id="playerName" placeholder="Player name..." />
-                <input type="number" id="playerScore" placeholder="Score..." step="0.01" />
-                <button class="btn btn-orange" onclick="addEntry()">ADD</button>
-            </div>
-            <div class="score-hint" id="scoreHint"></div>
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-card">
+            <div class="label">Total Drills</div>
+            <div class="value" id="statTotalDrills">0</div>
         </div>
-
-        <div class="leaderboard">
-            <div class="leaderboard-header">
-                <h3 id="leaderboardTitle">Leaderboard</h3>
-                <button class="btn btn-red" style="font-size:0.75em;padding:6px 12px;" onclick="clearDrill()">CLEAR ALL</button>
-            </div>
-            <div id="leaderboardBody"></div>
+        <div class="stat-card">
+            <div class="label">Total Entries</div>
+            <div class="value" id="statTotalEntries">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Current Leader</div>
+            <div class="value" id="statCurrentLeader">—</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Best Score</div>
+            <div class="value" id="statBestScore">—</div>
         </div>
     </div>
+
+    <div class="tabs-container">
+        <div class="tabs" id="drillTabs"></div>
+    </div>
+
+    <div class="main-content" id="drillPanels"></div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     TV / PRESENTATION MODE
-════════════════════════════════════════════ -->
+<!-- TV / PRESENTATION MODE -->
 <div class="tv-mode" id="tvMode">
     <div class="tv-header">
-        <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="BBTF Logo">
-        <h1>BREAKDOWN LEADERBOARD</h1>
+        <img src="https://cdn.prod.website-files.com/6480170c6a03f88dd25b8819/651f46749b264a0294c66921_BBTFlogo.webp" alt="Logo" class="logo">
+        <h1>Breakdown Leaderboard</h1>
+        <div class="tv-drill-name" id="tvDrillName">—</div>
     </div>
 
-    <div class="tv-drill-name" id="tvDrillName">SELECT A DRILL</div>
-
-    <div class="tv-scores-container">
-        <table class="tv-scores-table">
-            <thead>
-                <tr>
-                    <th style="width:90px;">RANK</th>
-                    <th>PLAYER</th>
-                    <th id="tvScoreHeader" style="width:160px;">SCORE</th>
-                </tr>
-            </thead>
-            <tbody id="tvScoresBody"></tbody>
-        </table>
+    <!-- DRILL NAVIGATION -->
+    <div class="tv-drill-nav" id="tvDrillNav">
+        <button class="tv-nav-arrow" id="tvPrevBtn" onclick="tvNavigate(-1)">&#8592;</button>
+        <div id="tvDrillNavBtns" style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;"></div>
+        <button class="tv-nav-arrow" id="tvNextBtn" onclick="tvNavigate(1)">&#8594;</button>
     </div>
 
-    <div class="tv-rotation-bar">
-        <label>
-            <input type="checkbox" id="autoRotateToggle" onchange="toggleAutoRotate()">
-            AUTO-ROTATE DRILLS
-        </label>
-        <select id="rotateSpeed" onchange="restartAutoRotateIfActive()">
-            <option value="5000">Every 5s</option>
-            <option value="10000" selected>Every 10s</option>
-            <option value="15000">Every 15s</option>
-            <option value="20000">Every 20s</option>
-            <option value="30000">Every 30s</option>
+    <!-- ROTATION CONTROLS -->
+    <div class="tv-rotation-controls">
+        <button class="auto-rotate-btn" id="autoRotateBtn" onclick="toggleAutoRotate()">▶ Auto Rotate</button>
+        <label>Speed:</label>
+        <select id="rotateSpeed" onchange="updateRotateSpeed()">
+            <option value="5000">5 sec</option>
+            <option value="10000" selected>10 sec</option>
+            <option value="15000">15 sec</option>
+            <option value="20000">20 sec</option>
+            <option value="30000">30 sec</option>
         </select>
-        <span class="tv-drill-indicator" id="tvDrillIndicator"></span>
+        <span class="drill-indicator" id="drillIndicator">Drill 1 of 1</span>
     </div>
 
-    <div class="tv-ticker">
-        <span class="tv-ticker-inner" id="tvTickerText">🏀 BREAKDOWN BASKETBALL TRAINING FACILITY — LIVE LEADERBOARD 🏀</span>
+    <div class="tv-scores-wrapper">
+        <div class="tv-scores-container" id="tvScoresContainer"></div>
+    </div>
+
+    <div class="ticker">
+        <div class="ticker-content" id="tickerContent">
+            🏆 BREAKDOWN LEADERBOARD &nbsp;&nbsp;&nbsp; TRAIN HARD. COMPETE HARDER. &nbsp;&nbsp;&nbsp;
+        </div>
     </div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     MODE TOGGLE (fixed, above ticker)
-════════════════════════════════════════════ -->
+<!-- MODE TOGGLE BUTTONS -->
 <div class="mode-toggle">
-    <button class="mode-btn active" id="adminBtn" onclick="switchMode('admin')">⚙️ ADMIN</button>
-    <button class="mode-btn" id="tvBtn" onclick="switchMode('tv')">📺 TV MODE</button>
+    <button class="mode-btn active" id="adminBtn" onclick="switchMode('admin')">⚙️ Admin</button>
+    <button class="mode-btn" id="tvBtn" onclick="switchMode('tv')">📺 TV Mode</button>
 </div>
 
-<!-- ════════════════════════════════════════════
-     ADD DRILL MODAL
-════════════════════════════════════════════ -->
-<div class="modal-overlay" id="addDrillModal">
+<!-- CREATE DRILL MODAL -->
+<div class="modal-overlay" id="createDrillModal">
     <div class="modal">
-        <h2>➕ New Drill</h2>
-        <label>Drill Name</label>
-        <input type="text" id="newDrillName" placeholder="e.g. 30sec Lane Touch" oninput="validateDrillForm()" />
-        <label>Scoring Type</label>
-        <select id="newDrillType" onchange="validateDrillForm()">
-            <option value="">-- Select type --</option>
-            <option value="time">⏱️ Time — lower is better</option>
-            <option value="count">📊 Count — higher is better</option>
-        </select>
+        <button class="modal-close" onclick="closeModal('createDrillModal')">✕</button>
+        <h2>➕ Create New Drill</h2>
+        <div class="form-group">
+            <label>Drill Name</label>
+            <input type="text" id="newDrillName" placeholder="e.g. 30s Sprint" oninput="validateDrillForm()">
+        </div>
+        <div class="form-group">
+            <label>Score Type</label>
+            <select id="newDrillType" onchange="validateDrillForm()">
+                <option value="">-- Select Type --</option>
+                <option value="time">Time (lower is better)</option>
+                <option value="count">Count (higher is better)</option>
+            </select>
+        </div>
         <div class="modal-buttons">
-            <button class="modal-cancel" onclick="closeAddDrillModal()">CANCEL</button>
-            <button class="modal-confirm" id="createDrillBtn" onclick="confirmAddDrill()" disabled>CREATE DRILL</button>
+            <button class="btn btn-primary" id="createDrillBtn" onclick="createDrill()" disabled>Create Drill</button>
+            <button class="btn btn-secondary" onclick="closeModal('createDrillModal')">Cancel</button>
         </div>
     </div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     EDIT ENTRY MODAL
-════════════════════════════════════════════ -->
-<div class="modal-overlay" id="editModal">
+<!-- EDIT SCORE MODAL -->
+<div class="modal-overlay" id="editScoreModal">
     <div class="modal">
+        <button class="modal-close" onclick="closeModal('editScoreModal')">✕</button>
         <h2>✏️ Edit Score</h2>
-        <label>Player Name</label>
-        <input type="text" id="editPlayerName" placeholder="Player name..." />
-        <label>Score</label>
-        <input type="number" id="editPlayerScore" placeholder="Score..." step="0.01" />
+        <div class="form-group">
+            <label>Player Name</label>
+            <input type="text" id="editPlayerName" placeholder="Player name">
+        </div>
+        <div class="form-group">
+            <label id="editScoreLabel">Score</label>
+            <input type="number" id="editScoreValue" placeholder="Score" step="0.01">
+        </div>
         <div class="modal-buttons">
-            <button class="modal-cancel" onclick="closeEditModal()">CANCEL</button>
-            <button class="modal-confirm" onclick="confirmEdit()">SAVE CHANGES</button>
+            <button class="btn btn-primary" onclick="saveEditedScore()">Save Changes</button>
+            <button class="btn btn-secondary" onclick="closeModal('editScoreModal')">Cancel</button>
         </div>
     </div>
 </div>
-
-<!-- ════════════════════════════════════════════
-     FIREBASE SDK
-════════════════════════════════════════════ -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-    // ── PASTE YOUR FIREBASE CONFIG HERE ──────────────────────────────────────
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT.appspot.com",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
-    // ─────────────────────────────────────────────────────────────────────────
-
-    let firebaseEnabled = false;
-    let db = null;
-    let dbRef = null;
-
-    try {
-        const app = initializeApp(firebaseConfig);
-        db = getDatabase(app);
-        dbRef = ref(db, 'leaderboard');
-        firebaseEnabled = true;
-    } catch(e) {
-        console.warn('Firebase init failed, using localStorage only.', e);
-    }
-
-    // Expose to global scope
-    window._firebase = { enabled: firebaseEnabled, db, dbRef, set, onValue, ref };
-
-    if (firebaseEnabled) {
-        setSyncStatus('syncing', 'Connecting...');
-        onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data && Array.isArray(data)) {
-                window._drills = data;
-                localStorage.setItem('bbDrills', JSON.stringify(data));
-                setSyncStatus('connected', 'Live ✓');
-                if (window._appReady) window.renderAll();
-            } else {
-                setSyncStatus('connected', 'Live ✓');
-                if (window._appReady) window.pushToFirebase();
-            }
-        }, (err) => {
-            setSyncStatus('error', 'Offline');
-            console.error(err);
-        });
-    }
-
-    window.pushToFirebase = function() {
-        if (firebaseEnabled && db && dbRef) {
-            set(dbRef, window._drills).catch(e => console.error('Firebase write error', e));
-        }
-    };
-
-    function setSyncStatus(state, label) {
-        const dot = document.getElementById('syncDot');
-        const lbl = document.getElementById('syncLabel');
-        dot.className = 'sync-dot ' + state;
-        lbl.textContent = label;
-    }
-    window.setSyncStatus = setSyncStatus;
-</script>
 
 <script>
-    // ════════════════════════════════════════════════════════════════════════
-    // DATA
-    // ════════════════════════════════════════════════════════════════════════
-    const DEFAULT_DRILLS = [
-        { id: 'lane30',  name: '30sec Lane Touch',    type: 'count', entries: [] },
-        { id: 'drill17', name: '17s',                 type: 'time',  entries: [] },
-        { id: 'round2',  name: '2min Round The World',type: 'time',  entries: [] },
-        { id: 'dod45',   name: '45 Do Or Die',        type: 'time',  entries: [] }
-    ];
+// ============================================================
+// FIREBASE CONFIG — Replace with your own Firebase project details
+// ============================================================
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    databaseURL: "YOUR_DATABASE_URL",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
 
-    window._drills = JSON.parse(localStorage.getItem('bbDrills')) || DEFAULT_DRILLS;
+// ============================================================
+// DATA STORE (local fallback if Firebase not configured)
+// ============================================================
+let drills = [
+    { id: 'drill_1', name: '30sec Lane Touch', type: 'count' },
+    { id: 'drill_2', name: '17s', type: 'time' },
+    { id: 'drill_3', name: '2min Round The World', type: 'count' },
+    { id: 'drill_4', name: '45 Do Or Die', type: 'time' }
+];
 
-    // Proxy so all reads/writes go through window._drills
-    function getDrills()          { return window._drills; }
-    function setDrills(d)         { window._drills = d; }
+let scores = {};
+drills.forEach(d => scores[d.id] = []);
 
-    let currentDrillId  = getDrills()[0].id;
-    let editingEntryId  = null;
-    let autoRotateInterval = null;
-    let currentTvDrillIndex = 0;
+let activeDrillId = drills[0].id;
+let currentMode = 'admin';
+let tvDrillIndex = 0;
+let autoRotateInterval = null;
+let isAutoRotating = false;
+let editingEntry = null;
 
-    function saveData() {
-        localStorage.setItem('bbDrills', JSON.stringify(getDrills()));
-        if (window.pushToFirebase) window.pushToFirebase();
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+    loadFromLocalStorage();
+    renderAll();
+}
+
+function loadFromLocalStorage() {
+    try {
+        const savedDrills = localStorage.getItem('bb_drills');
+        const savedScores = localStorage.getItem('bb_scores');
+        if (savedDrills) drills = JSON.parse(savedDrills);
+        if (savedScores) scores = JSON.parse(savedScores);
+        // Ensure scores object has keys for all drills
+        drills.forEach(d => { if (!scores[d.id]) scores[d.id] = []; });
+    } catch(e) {
+        console.log('LocalStorage load error:', e);
     }
+}
 
-    function getCurrentDrill() {
-        return getDrills().find(d => d.id === currentDrillId);
+function saveToLocalStorage() {
+    try {
+        localStorage.setItem('bb_drills', JSON.stringify(drills));
+        localStorage.setItem('bb_scores', JSON.stringify(scores));
+    } catch(e) {
+        console.log('LocalStorage save error:', e);
     }
+}
 
-    // ════════════════════════════════════════════════════════════════════════
-    // TABS
-    // ════════════════════════════════════════════════════════════════════════
-    function renderTabs() {
-        const container = document.getElementById('tabsContainer');
-        container.innerHTML = '';
+function renderAll() {
+    renderTabs();
+    renderPanels();
+    renderStats();
+    renderTVMode();
+    renderTVDrillNav();
+}
 
-        getDrills().forEach(drill => {
-            const btn = document.createElement('div');
-            btn.className = 'tab-btn' + (drill.id === currentDrillId ? ' active' : '');
-            btn.innerHTML = `
-                <span onclick="switchDrill('${drill.id}')">${drill.name}</span>
-                <button class="tab-delete" onclick="deleteDrill('${drill.id}')" title="Delete drill">✕</button>
-            `;
-            container.appendChild(btn);
-        });
+// ============================================================
+// TABS
+// ============================================================
+function renderTabs() {
+    const tabsEl = document.getElementById('drillTabs');
+    tabsEl.innerHTML = '';
 
-        const addBtn = document.createElement('button');
-        addBtn.className = 'add-drill-tab';
-        addBtn.textContent = '+ NEW DRILL';
-        addBtn.onclick = openAddDrillModal;
-        container.appendChild(addBtn);
-    }
+    drills.forEach(drill => {
+        const tab = document.createElement('div');
+        tab.className = 'tab' + (drill.id === activeDrillId ? ' active' : '');
+        tab.innerHTML = `
+            <span onclick="switchDrill('${drill.id}')">${drill.name}</span>
+            <button class="delete-drill" onclick="deleteDrill('${drill.id}')" title="Delete drill">✕</button>
+        `;
+        tabsEl.appendChild(tab);
+    });
 
-    function switchDrill(id) {
-        currentDrillId = id;
-        renderAll();
-    }
+    const addTab = document.createElement('div');
+    addTab.className = 'add-drill-tab';
+    addTab.textContent = '+ New Drill';
+    addTab.onclick = () => openModal('createDrillModal');
+    tabsEl.appendChild(addTab);
+}
 
-    function deleteDrill(id) {
-        const drills = getDrills();
-        if (drills.length <= 1) { alert('You must keep at least one drill.'); return; }
-        if (!confirm('Delete this drill and ALL its scores? This cannot be undone.')) return;
-        setDrills(drills.filter(d => d.id !== id));
-        if (currentDrillId === id) currentDrillId = getDrills()[0].id;
-        saveData();
-        renderAll();
-    }
+function switchDrill(drillId) {
+    activeDrillId = drillId;
+    renderTabs();
+    document.querySelectorAll('.drill-panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById('panel_' + drillId);
+    if (panel) panel.classList.add('active');
+    renderStats();
+}
 
-    // ════════════════════════════════════════════════════════════════════════
-    // STATS
-    // ════════════════════════════════════════════════════════════════════════
-    function renderStats() {
-        const drill   = getCurrentDrill();
-        const sorted  = getSortedEntries(drill);
-        const leader  = sorted[0];
-        const allEntries = getDrills().reduce((sum, d) => sum + d.entries.length, 0);
+// ============================================================
+// PANELS
+// ============================================================
+function renderPanels() {
+    const panelsEl = document.getElementById('drillPanels');
+    panelsEl.innerHTML = '';
 
-        document.getElementById('statsBar').innerHTML = `
-            <div class="stat-card">
-                <div class="label">Entries (This Drill)</div>
-                <div class="value">${drill.entries.length}</div>
+    drills.forEach(drill => {
+        const panel = document.createElement('div');
+        panel.className = 'drill-panel' + (drill.id === activeDrillId ? ' active' : '');
+        panel.id = 'panel_' + drill.id;
+
+        const scoreLabel = drill.type === 'count' ? 'Count (reps)' : 'Time (seconds)';
+        const scorePlaceholder = drill.type === 'count' ? 'e.g. 42' : 'e.g. 20.5';
+
+        panel.innerHTML = `
+            <div class="add-score-form admin-only">
+                <h3>➕ Add Score — ${drill.name}</h3>
+                <div class="form-row">
+                    <input type="text" id="playerName_${drill.id}" placeholder="Player Name">
+                    <input type="number" id="scoreInput_${drill.id}" placeholder="${scorePlaceholder}" step="0.01">
+                    <button class="btn btn-primary" onclick="addScore('${drill.id}')">Add Score</button>
+                </div>
+                <div style="margin-top:8px; font-size:0.8em; color:#888;">
+                    📊 Score type: <strong style="color:#ff6a00;">${scoreLabel}</strong>
+                    ${drill.type === 'time' ? '— Lower is better ⬇️' : '— Higher is better ⬆️'}
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="label">Current Leader</div>
-                <div class="value">${leader ? leader.name : '—'}</div>
+
+            <div class="drill-controls admin-only">
+                <button class="btn btn-danger" onclick="clearDrillScores('${drill.id}')">🗑️ Clear All Scores</button>
             </div>
-            <div class="stat-card">
-                <div class="label">Best ${drill.type === 'count' ? 'Count' : 'Time'}</div>
-                <div class="value">${leader ? formatScore(leader.score, drill.type) : '—'}</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Total Drills</div>
-                <div class="value">${getDrills().length}</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Total Entries</div>
-                <div class="value">${allEntries}</div>
+
+            <div class="leaderboard-container">
+                <div class="leaderboard-header">
+                    <h3>🏆 ${drill.name} — Leaderboard</h3>
+                    <span style="font-size:0.85em;">${drill.type === 'count' ? '⬆️ Highest First' : '⬇️ Fastest First'}</span>
+                </div>
+                <div id="leaderboard_${drill.id}"></div>
             </div>
         `;
+        panelsEl.appendChild(panel);
+        renderLeaderboard(drill.id);
+    });
+}
+
+// ============================================================
+// LEADERBOARD
+// ============================================================
+function getSortedScores(drillId) {
+    const drill = drills.find(d => d.id === drillId);
+    if (!drill || !scores[drillId]) return [];
+    const sorted = [...scores[drillId]];
+    if (drill.type === 'count') {
+        sorted.sort((a, b) => b.score - a.score);
+    } else {
+        sorted.sort((a, b) => a.score - b.score);
+    }
+    return sorted.slice(0, 50);
+}
+
+function renderLeaderboard(drillId) {
+    const drill = drills.find(d => d.id === drillId);
+    const container = document.getElementById('leaderboard_' + drillId);
+    if (!container || !drill) return;
+
+    const sorted = getSortedScores(drillId);
+
+    if (sorted.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="icon">🏁</div>
+                <div>No scores yet. Add the first score!</div>
+            </div>`;
+        return;
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    // HELPERS
-    // ════════════════════════════════════════════════════════════════════════
-    function getSortedEntries(drill) {
-        return [...drill.entries].sort((a, b) =>
-            drill.type === 'count' ? b.score - a.score : a.score - b.score
-        );
-    }
+    const scoreColLabel = drill.type === 'count' ? 'Count' : 'Time';
 
-    function formatScore(score, type) {
-        if (type === 'time') return parseFloat(score).toFixed(2) + 's';
-        return parseInt(score);
-    }
+    let html = `
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>${scoreColLabel}</th>
+                    <th>Date</th>
+                    <th class="admin-only">Actions</th>
+                </tr>
+            </thead>
+            <tbody>`;
 
-    function nowTimestamp() {
-        return new Date().toLocaleString('en-AU', {
-            day: '2-digit', month: '2-digit', year: 'numeric',
-            hour: '2-digit', minute: '2-digit'
-        });
-    }
-
-    // ════════════════════════════════════════════════════════════════════════
-    // ADD ENTRY
-    // ════════════════════════════════════════════════════════════════════════
-    function addEntry() {
-        const drill    = getCurrentDrill();
-        const name     = document.getElementById('playerName').value.trim();
-        const scoreRaw = document.getElementById('playerScore').value.trim();
-
-        if (!name)            { alert('Please enter a player name.'); return; }
-        if (!scoreRaw)        { alert('Please enter a score.'); return; }
-        const score = parseFloat(scoreRaw);
-        if (isNaN(score) || score < 0) { alert('Please enter a valid positive score.'); return; }
-
-        // Determine if this is a personal best
-        const playerEntries = drill.entries.filter(e => e.name.toLowerCase() === name.toLowerCase());
-        let isPB = playerEntries.length === 0; // First entry is always a PB
-
-        if (!isPB) {
-            const best = playerEntries.reduce((b, e) =>
-                drill.type === 'count' ? (e.score > b.score ? e : b) : (e.score < b.score ? e : b)
-            );
-            isPB = drill.type === 'count' ? score > best.score : score < best.score;
-        }
-
-        const entry = {
-            id:        Date.now().toString(),
-            name,
-            score,
-            isPB,
-            timestamp: nowTimestamp()
-        };
-
-        drill.entries.push(entry);
-
-        // Keep top 50 only
-        if (drill.entries.length > 50) {
-            drill.entries = getSortedEntries(drill).slice(0, 50);
-        }
-
-        saveData();
-        document.getElementById('playerName').value  = '';
-        document.getElementById('playerScore').value = '';
-        renderAll();
-    }
-
-    // ════════════════════════════════════════════════════════════════════════
-    // DELETE / CLEAR
-    // ════════════════════════════════════════════════════════════════════════
-    function deleteEntry(id) {
-        if (!confirm('Remove this entry?')) return;
-        const drill = getCurrentDrill();
-        drill.entries = drill.entries.filter(e => e.id !== id);
-        saveData();
-        renderAll();
-    }
-
-    function clearDrill() {
-        if (!confirm('Clear ALL entries for this drill? This cannot be undone.')) return;
-        getCurrentDrill().entries = [];
-        saveData();
-        renderAll();
-    }
-
-    // ════════════════════════════════════════════════════════════════════════
-    // EDIT ENTRY
-    // ════════════════════════════════════════════════════════════════════════
-    function openEditModal(id) {
-        const drill = getCurrentDrill();
-        const entry = drill.entries.find(e => e.id === id);
-        if (!entry) return;
-        editingEntryId = id;
-        document.getElementById('editPlayerName').value  = entry.name;
-        document.getElementById('editPlayerScore').value = entry.score;
-        document.getElementById('editModal').classList.add('active');
-    }
-
-    function closeEditModal() {
-        document.getElementById('editModal').classList.remove('active');
-        editingEntryId = null;
-    }
-
-    function confirmEdit() {
-        const drill = getCurrentDrill();
-        const entry = drill.entries.find(e => e.id === editingEntryId);
-        if (!entry) return;
-
-        const name     = document.getElementById('editPlayerName').value.trim();
-        const scoreRaw = document.getElementById('editPlayerScore').value.trim();
-        if (!name || !scoreRaw) { alert('Please fill in all fields.'); return; }
-        const score = parseFloat(scoreRaw);
-        if (isNaN(score) || score < 0) { alert('Invalid score.'); return; }
-
-        entry.name      = name;
-        entry.score     = score;
-        entry.timestamp = nowTimestamp();
-
-        // Recalculate PB for this player
-        const playerEntries = drill.entries.filter(e => e.name.toLowerCase() === name.toLowerCase());
-        playerEntries.forEach(e => e.isPB = false);
-        const best = playerEntries.reduce((b, e) =>
-            drill.type === 'count' ? (e.score > b.score ? e : b) : (e.score < b.score ? e : b)
-        );
-        best.isPB = true;
-
-        saveData();
-        closeEditModal();
-        renderAll();
-    }
-
-    // ════════════════════════════════════════════════════════════════════════
-    // LEADERBOARD RENDER
-    // ════════════════════════════════════════════════════════════════════════
-    function renderLeaderboard() {
-        const drill  = getCurrentDrill();
-        const sorted = getSortedEntries(drill);
-
-        document.getElementById('leaderboardTitle').textContent =
-            `${drill.name} — TOP ${Math.min(sorted.length, 50)}`;
-
-        document.getElementById('scoreHint').textContent =
-            drill.type === 'count'
-                ? '📊 Count-based drill — higher score is better'
-                : '⏱️ Time-based drill — lower time is better (e.g. 20.35)';
-
-        const body = document.getElementById('leaderboardBody');
-
-        if (sorted.length === 0) {
-            body.innerHTML = `
-                <div class="empty-state">
-                    <div class="icon">🏀</div>
-                    <div>No entries yet — add the first score!</div>
-                </div>`;
-            return;
-        }
-
+    sorted.forEach((entry, index) => {
+        const rank = index + 1;
+        let rankClass = rank <= 3 ? `rank-${rank}` : 'rank-other';
+        let rankDisplay = rank <= 3 ? ['🥇','🥈','🥉'][rank-1] : rank;
         const scoreClass = drill.type === 'count' ? 'score-count' : 'score-time';
-        const scoreLabel = drill.type === 'count' ? 'COUNT' : 'TIME';
+        const scoreDisplay = drill.type === 'time' ? entry.score + 's' : entry.score;
+        const pbBadge = entry.isPB ? '<span class="pb-badge">NEW PB! 🔥</span>' : '';
+        const dateStr = entry.timestamp ? new Date(entry.timestamp).toLocaleDateString() : '—';
+        const timeStr = entry.timestamp ? new Date(entry.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '';
 
-        let html = `<table>
-            <thead><tr>
-                <th>RANK</th>
-                <th>PLAYER</th>
-                <th>${scoreLabel}</th>
-                <th>DATE / TIME</th>
-                <th></th>
-            </tr></thead><tbody>`;
-
-        sorted.forEach((entry, i) => {
-            const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
-            const medal     = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`;
-            const pb        = entry.isPB ? '<span class="pb-badge">NEW PB 🔥</span>' : '';
-
-            html += `<tr>
-                <td class="${rankClass}">${medal}</td>
-                <td>${entry.name}${pb}</td>
-                <td class="${scoreClass}">${formatScore(entry.score, drill.type)}</td>
-                <td class="timestamp">${entry.timestamp || ''}</td>
-                <td>
-                    <button class="edit-entry-btn"   onclick="openEditModal('${entry.id}')" title="Edit">✏️</button>
-                    <button class="delete-entry-btn" onclick="deleteEntry('${entry.id}')"   title="Delete">🗑️</button>
+        html += `
+            <tr>
+                <td><span class="rank-badge ${rankClass}">${rankDisplay}</span></td>
+                <td>${entry.name}${pbBadge}</td>
+                <td><span class="${scoreClass}">${scoreDisplay}</span></td>
+                <td><span class="timestamp">${dateStr}<br>${timeStr}</span></td>
+                <td class="admin-only">
+                    <button class="action-btn edit-btn" onclick="openEditModal('${drillId}', '${entry.id}')">✏️</button>
+                    <button class="action-btn delete-btn" onclick="deleteScore('${drillId}', '${entry.id}')">🗑️</button>
                 </td>
             </tr>`;
-        });
+    });
 
-        html += '</tbody></table>';
-        body.innerHTML = html;
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+// ============================================================
+// ADD SCORE
+// ============================================================
+function addScore(drillId) {
+    const drill = drills.find(d => d.id === drillId);
+    const nameEl = document.getElementById('playerName_' + drillId);
+    const scoreEl = document.getElementById('scoreInput_' + drillId);
+
+    const name = nameEl.value.trim();
+    const score = parseFloat(scoreEl.value);
+
+    if (!name) { alert('Please enter a player name.'); return; }
+    if (isNaN(score) || score < 0) { alert('Please enter a valid score.'); return; }
+
+    // Check for personal best
+    const existing = scores[drillId].filter(e => e.name.toLowerCase() === name.toLowerCase());
+    let isPB = false;
+    if (existing.length === 0) {
+        isPB = true;
+    } else {
+        const bestExisting = drill.type === 'count'
+            ? Math.max(...existing.map(e => e.score))
+            : Math.min(...existing.map(e => e.score));
+        isPB = drill.type === 'count' ? score > bestExisting : score < bestExisting;
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    // TV MODE RENDER
-    // ════════════════════════════════════════════════════════════════════════
-    function renderTvMode(index) {
-        const drills = getDrills();
-        if (!drills.length) return;
+    const entry = {
+        id: 'entry_' + Date.now(),
+        name,
+        score,
+        isPB,
+        timestamp: Date.now()
+    };
 
-        if (index !== undefined) currentTvDrillIndex = index;
-        if (currentTvDrillIndex >= drills.length) currentTvDrillIndex = 0;
+    scores[drillId].push(entry);
+    saveToLocalStorage();
+    renderLeaderboard(drillId);
+    renderStats();
+    renderTVMode();
+    updateTicker();
 
-        const drill  = drills[currentTvDrillIndex];
-        const sorted = getSortedEntries(drill);
+    nameEl.value = '';
+    scoreEl.value = '';
+}
 
-        document.getElementById('tvDrillName').textContent    = drill.name.toUpperCase();
-        document.getElementById('tvScoreHeader').textContent  = drill.type === 'count' ? 'COUNT' : 'TIME';
-        document.getElementById('tvDrillIndicator').textContent =
-            `DRILL ${currentTvDrillIndex + 1} / ${drills.length}`;
+// ============================================================
+// DELETE SCORE
+// ============================================================
+function deleteScore(drillId, entryId) {
+    if (!confirm('Delete this score?')) return;
+    scores[drillId] = scores[drillId].filter(e => e.id !== entryId);
+    saveToLocalStorage();
+    renderLeaderboard(drillId);
+    renderStats();
+    renderTVMode();
+}
 
-        const body = document.getElementById('tvScoresBody');
+// ============================================================
+// CLEAR DRILL SCORES
+// ============================================================
+function clearDrillScores(drillId) {
+    const drill = drills.find(d => d.id === drillId);
+    if (!confirm(`Clear ALL scores for "${drill.name}"?`)) return;
+    scores[drillId] = [];
+    saveToLocalStorage();
+    renderLeaderboard(drillId);
+    renderStats();
+    renderTVMode();
+}
 
-        if (sorted.length === 0) {
-            body.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#555;padding:40px;font-size:1.2em;">No scores yet</td></tr>`;
-        } else {
-            body.innerHTML = sorted.map((entry, i) => {
-                const rankClass  = i === 0 ? 'tv-rank-1' : i === 1 ? 'tv-rank-2' : i === 2 ? 'tv-rank-3' : '';
-                const medal      = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`;
-                const scoreClass = drill.type === 'count' ? 'tv-score tv-score-count' : 'tv-score';
-                const pb         = entry.isPB ? '<span class="tv-pb">PB 🔥</span>' : '';
-                return `<tr>
-                    <td class="tv-rank ${rankClass}">${medal}</td>
-                    <td class="tv-name">${entry.name}${pb}</td>
-                    <td class="${scoreClass}">${formatScore(entry.score, drill.type)}</td>
-                </tr>`;
-            }).join('');
-        }
-
-        // Update ticker with leaders from all drills
-        const parts = drills.map(d => {
-            const s = getSortedEntries(d);
-            return s[0]
-                ? `${d.name.toUpperCase()}: 🥇 ${s[0].name} — ${formatScore(s[0].score, d.type)}`
-                : `${d.name.toUpperCase()}: No scores yet`;
-        });
-        document.getElementById('tvTickerText').textContent =
-            '🏀  ' + parts.join('     •     ') + '     🏀';
+// ============================================================
+// DELETE DRILL
+// ============================================================
+function deleteDrill(drillId) {
+    const drill = drills.find(d => d.id === drillId);
+    if (!confirm(`Delete drill "${drill.name}" and all its scores?`)) return;
+    drills = drills.filter(d => d.id !== drillId);
+    delete scores[drillId];
+    if (activeDrillId === drillId) {
+        activeDrillId = drills.length > 0 ? drills[0].id : null;
     }
-
-    // ════════════════════════════════════════════════════════════════════════
-    // AUTO ROTATE
-    // ════════════════════════════════════════════════════════════════════════
-    function toggleAutoRotate() {
-        const enabled = document.getElementById('autoRotateToggle').checked;
-        enabled ? startAutoRotate() : stopAutoRotate();
-    }
-
-    function startAutoRotate() {
-        stopAutoRotate();
-        const speed = parseInt(document.getElementById('rotateSpeed').value);
-        autoRotateInterval = setInterval(() => {
-            currentTvDrillIndex = (currentTvDrillIndex + 1) % getDrills().length;
-            renderTvMode();
-        }, speed);
-    }
-
-    function stopAutoRotate() {
-        if (autoRotateInterval) { clearInterval(autoRotateInterval); autoRotateInterval = null; }
-    }
-
-    function restartAutoRotateIfActive() {
-        if (document.getElementById('autoRotateToggle').checked) startAutoRotate();
-    }
-
-    // ════════════════════════════════════════════════════════════════════════
-    // MODE SWITCH
-    // ════════════════════════════════════════════════════════════════════════
-    function switchMode(mode) {
-        if (mode === 'tv') {
-            document.getElementById('tvMode').classList.add('active');
-            document.getElementById('adminMode').style.display = 'none';
-            document.getElementById('tvBtn').classList.add('active');
-            document.getElementById('adminBtn').classList.remove('active');
-            // Start on the currently selected admin drill
-            currentTvDrillIndex = Math.max(0, getDrills().findIndex(d => d.id === currentDrillId));
-            renderTvMode();
-        } else {
-            document.getElementById('tvMode').classList.remove('active');
-            document.getElementById('adminMode').style.display = 'block';
-            document.getElementById('adminBtn').classList.add('active');
-            document.getElementById('tvBtn').classList.remove('active');
-            stopAutoRotate();
-            document.getElementById('autoRotateToggle').checked = false;
-            renderAll();
-        }
-    }
-
-    // ════════════════════════════════════════════════════════════════════════
-    // ADD DRILL MODAL
-    // ════════════════════════════════════════════════════════════════════════
-    function openAddDrillModal() {
-        document.getElementById('newDrillName').value  = '';
-        document.getElementById('newDrillType').value  = '';
-        document.getElementById('createDrillBtn').disabled = true;
-        document.getElementById('addDrillModal').classList.add('active');
-        setTimeout(() => document.getElementById('newDrillName').focus(), 100);
-    }
-
-    function closeAddDrillModal() {
-        document.getElementById('addDrillModal').classList.remove('active');
-    }
-
-    function validateDrillForm() {
-        const name = document.getElementById('newDrillName').value.trim();
-        const type = document.getElementById('newDrillType').value;
-        document.getElementById('createDrillBtn').disabled = !(name && type);
-    }
-
-    function confirmAddDrill() {
-        const name = document.getElementById('newDrillName').value.trim();
-        const type = document.getElementById('newDrillType').value;
-        if (!name || !type) return;
-
-        const newDrill = { id: 'drill_' + Date.now(), name, type, entries: [] };
-        getDrills().push(newDrill);
-        currentDrillId = newDrill.id;
-        saveData();
-        closeAddDrillModal();
-        renderAll();
-    }
-
-    // ════════════════════════════════════════════════════════════════════════
-    // RENDER ALL
-    // ════════════════════════════════════════════════════════════════════════
-    function renderAll() {
-        renderTabs();
-        renderStats();
-        renderLeaderboard();
-    }
-
-    // Expose to global for Firebase callback
-    window.renderAll = renderAll;
-
-    // ════════════════════════════════════════════════════════════════════════
-    // INIT
-    // ════════════════════════════════════════════════════════════════════════
-    window._appReady = true;
+    saveToLocalStorage();
     renderAll();
+}
+
+// ============================================================
+// EDIT SCORE
+// ============================================================
+function openEditModal(drillId, entryId) {
+    const drill = drills.find(d => d.id === drillId);
+    const entry = scores[drillId].find(e => e.id === entryId);
+    if (!drill || !entry) return;
+
+    editingEntry = { drillId, entryId };
+    document.getElementById('editPlayerName').value = entry.name;
+    document.getElementById('editScoreValue').value = entry.score;
+    document.getElementById('editScoreLabel').textContent =
+        drill.type === 'count' ? 'Count (reps)' : 'Time (seconds)';
+    openModal('editScoreModal');
+}
+
+function saveEditedScore() {
+    if (!editingEntry) return;
+    const { drillId, entryId } = editingEntry;
+    const drill = drills.find(d => d.id === drillId);
+    const entryIndex = scores[drillId].findIndex(e => e.id === entryId);
+    if (entryIndex === -1) return;
+
+    const newName = document.getElementById('editPlayerName').value.trim();
+    const newScore = parseFloat(document.getElementById('editScoreValue').value);
+
+    if (!newName) { alert('Please enter a player name.'); return; }
+    if (isNaN(newScore) || newScore < 0) { alert('Please enter a valid score.'); return; }
+
+    // Recalculate PB
+    const others = scores[drillId].filter((e, i) => i !== entryIndex && e.name.toLowerCase() === newName.toLowerCase());
+    let isPB = false;
+    if (others.length === 0) {
+        isPB = true;
+    } else {
+        const bestOther = drill.type === 'count'
+            ? Math.max(...others.map(e => e.score))
+            : Math.min(...others.map(e => e.score));
+        isPB = drill.type === 'count' ? newScore > bestOther : newScore < bestOther;
+    }
+
+    scores[drillId][entryIndex] = {
+        ...scores[drillId][entryIndex],
+        name: newName,
+        score: newScore,
+        isPB,
+        timestamp: Date.now()
+    };
+
+    saveToLocalStorage();
+    renderLeaderboard(drillId);
+    renderStats();
+    renderTVMode();
+    closeModal('editScoreModal');
+    editingEntry = null;
+}
+
+// ============================================================
+// CREATE DRILL
+// ============================================================
+function validateDrillForm() {
+    const name = document.getElementById('newDrillName').value.trim();
+    const type = document.getElementById('newDrillType').value;
+    document.getElementById('createDrillBtn').disabled = !(name && type);
+}
+
+function createDrill() {
+    const name = document.getElementById('newDrillName').value.trim();
+    const type = document.getElementById('newDrillType').value;
+    if (!name || !type) return;
+
+    const newDrill = {
+        id: 'drill_' + Date.now(),
+        name,
+        type
+    };
+
+    drills.push(newDrill);
+    scores[newDrill.id] = [];
+    activeDrillId = newDrill.id;
+    saveToLocalStorage();
+    renderAll();
+    closeModal('createDrillModal');
+    document.getElementById('newDrillName').value = '';
+    document.getElementById('newDrillType').value = '';
+    document.getElementById('createDrillBtn').disabled = true;
+}
+
+// ============================================================
+// STATS
+// ============================================================
+function renderStats() {
+    document.getElementById('statTotalDrills').textContent = drills.length;
+
+    let totalEntries = 0;
+    drills.forEach(d => { totalEntries += (scores[d.id] || []).length; });
+    document.getElementById('statTotalEntries').textContent = totalEntries;
+
+    // Current leader from active drill
+    if (activeDrillId && scores[activeDrillId] && scores[activeDrillId].length > 0) {
+        const sorted = getSortedScores(activeDrillId);
+        const drill = drills.find(d => d.id === activeDrillId);
+        document.getElementById('statCurrentLeader').textContent = sorted[0].name;
+        document.getElementById('statBestScore').textContent =
+            drill.type === 'time' ? sorted[0].score + 's' : sorted[0].score;
+    } else {
+        document.getElementById('statCurrentLeader').textContent = '—';
+        document.getElementById('statBestScore').textContent = '—';
+    }
+}
+
+// ============================================================
+// TV MODE
+// ============================================================
+function renderTVMode() {
+    if (drills.length === 0) return;
+    if (tvDrillIndex >= drills.length) tvDrillIndex = 0;
+    const drill = drills[tvDrillIndex];
+    renderTVDrill(drill);
+    updateTicker();
+}
+
+function renderTVDrill(drill) {
+    document.getElementById('tvDrillName').textContent = drill.name;
+    document.getElementById('drillIndicator').textContent =
+        `Drill ${tvDrillIndex + 1} of ${drills.length}`;
+
+    const sorted = getSortedScores(drill.id);
+    const container = document.getElementById('tvScoresContainer');
+
+    if (sorted.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center; padding:60px; color:#888; font-size:1.5em;">
+                No scores yet for this drill
+            </div>`;
+        return;
+    }
+
+    let html = '';
+    sorted.forEach((entry, index) => {
+        const rank = index + 1;
+        let rankDisplay = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+        const scoreDisplay = drill.type === 'time' ? entry.score + 's' : entry.score;
+        const pbBadge = entry.isPB ? '<span class="tv-pb">🔥 PB</span>' : '';
+
+        html += `
+            <div class="tv-score-row">
+                <div class="tv-rank">${rankDisplay}</div>
+                <div class="tv-player-name">${entry.name}${pbBadge}</div>
+                <div class="tv-score">${scoreDisplay}</div>
+            </div>`;
+    });
+
+    container.innerHTML = html;
+
+    // Update nav buttons active state
+    renderTVDrillNav();
+}
+
+function renderTVDrillNav() {
+    const navBtns = document.getElementById('tvDrillNavBtns');
+    if (!navBtns) return;
+    navBtns.innerHTML = '';
+    drills.forEach((drill, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'tv-drill-nav-btn' + (index === tvDrillIndex ? ' active' : '');
+        btn.textContent = drill.name;
+        btn.onclick = () => {
+            tvDrillIndex = index;
+            renderTVMode();
+        };
+        navBtns.appendChild(btn);
+    });
+}
+
+function tvNavigate(direction) {
+    tvDrillIndex = (tvDrillIndex + direction + drills.length) % drills.length;
+    renderTVMode();
+}
+
+// ============================================================
+// AUTO ROTATE
+// ============================================================
+function toggleAutoRotate() {
+    isAutoRotating = !isAutoRotating;
+    const btn = document.getElementById('autoRotateBtn');
+    if (isAutoRotating) {
+        btn.textContent = '⏸ Stop Rotation';
+        btn.classList.add('active');
+        startAutoRotate();
+    } else {
+        btn.textContent = '▶ Auto Rotate';
+        btn.classList.remove('active');
+        stopAutoRotate();
+    }
+}
+
+function startAutoRotate() {
+    stopAutoRotate();
+    const speed = parseInt(document.getElementById('rotateSpeed').value);
+    autoRotateInterval = setInterval(() => {
+        tvDrillIndex = (tvDrillIndex + 1) % drills.length;
+        renderTVMode();
+    }, speed);
+}
+
+function stopAutoRotate() {
+    if (autoRotateInterval) {
+        clearInterval(autoRotateInterval);
+        autoRotateInterval = null;
+    }
+}
+
+function updateRotateSpeed() {
+    if (isAutoRotating) {
+        startAutoRotate();
+    }
+}
+
+// ============================================================
+// TICKER
+// ============================================================
+function updateTicker() {
+    let tickerText = '🏆 BREAKDOWN LEADERBOARD &nbsp;&nbsp;&nbsp; TRAIN HARD. COMPETE HARDER. &nbsp;&nbsp;&nbsp;';
+    drills.forEach(drill => {
+        const sorted = getSortedScores(drill.id);
+        if (sorted.length > 0) {
+            const scoreDisplay = drill.type === 'time' ? sorted[0].score + 's' : sorted[0].score;
+            tickerText += `🏅 ${drill.name}: ${sorted[0].name} — ${scoreDisplay} &nbsp;&nbsp;&nbsp; `;
+        }
+    });
+    const tickerEl = document.getElementById('tickerContent');
+    if (tickerEl) tickerEl.innerHTML = tickerText;
+}
+
+// ============================================================
+// MODE SWITCH
+// ============================================================
+function switchMode(mode) {
+    currentMode = mode;
+    const adminMode = document.getElementById('adminMode');
+    const tvMode = document.getElementById('tvMode');
+    const adminBtn = document.getElementById('adminBtn');
+    const tvBtn = document.getElementById('tvBtn');
+
+    if (mode === 'tv') {
+        adminMode.style.display = 'none';
+        tvMode.classList.add('active');
+        adminBtn.classList.remove('active');
+        tvBtn.classList.add('active');
+        renderTVMode();
+    } else {
+        adminMode.style.display = 'block';
+        tvMode.classList.remove('active');
+        adminBtn.classList.add('active');
+        tvBtn.classList.remove('active');
+    }
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id) {
+    document.getElementById(id).classList.add('active');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+        if (e.target === this) closeModal(this.id);
+    });
+});
+
+// ============================================================
+// START
+// ============================================================
+init();
 </script>
 </body>
 </html>
